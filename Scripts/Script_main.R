@@ -23,8 +23,12 @@ summary(data)
 
 
 # Changing variable name "1gender" since it starts with a number
-data %>% 
+data <- data %>% 
   rename(gender = '1gender')
 
+#checking if two variables (gender) are duplicates
+data$preOp_gender==data$gender
 
-
+#confirmed that preOp_gender== gender
+#deleting preOp_gender since it is a duplicate
+data$preOp_gender = NULL
