@@ -25,6 +25,10 @@ summary(data)
 data <- data %>% 
   rename(gender = '1gender')
 
+# Changing variable name "BMI kg/m2" to BMI
+data <- data %>%
+  rename(BMI = `BMI kg/m2`)
+
 #checking if two variables (gender) are duplicates
 data$preOp_gender==data$gender
 
