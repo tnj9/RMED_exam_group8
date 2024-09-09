@@ -15,9 +15,11 @@ library(here)
 #Load data from .txt file
 Data <- read_delim(here("DATA","exam_dataset.txt"))
 
-#Inspect data
-head(Data)
+# Separate the preOp_ASA_Mallampati into: ASA_score and Mallampati_score
+Data <- Data %>%
+  separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_")
+
+# View the updated data
+colnames(Data)
 
 
-Duplicate
-           
