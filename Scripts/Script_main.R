@@ -7,3 +7,24 @@
 #               
 # Project: RMED_exam_group8
 #-------------------------------------------###
+
+# Load libraries
+library(tidyverse)
+library(tidyr)
+library(here)
+
+# Import data
+data <- read_delim(here("DATA", "exam_dataset.txt"))
+
+#explore data
+head(data)
+tail(data)
+summary(data)
+
+
+# Changing variable name "1gender" since it starts with a number
+data %>% 
+  rename(gender = '1gender')
+
+
+
