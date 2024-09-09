@@ -7,3 +7,12 @@
 #               
 # Project: RMED_exam_group8
 #-------------------------------------------###
+
+# Load libraries
+library(tidyverse)
+library(tidyr)
+library(here)
+
+# Import data
+data <- read_delim(here("DATA", "exam_dataset.txt"))
+
