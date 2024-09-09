@@ -33,8 +33,9 @@ data$preOp_gender==data$gender
 data$preOp_gender = NULL
 
 # Separate the preOp_ASA_Mallampati into: ASA_score and Mallampati_score
-Data <- Data %>%
+data <- data %>%
   separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_")
 
 # View the updated data
-colnames(Data)
+colnames(data)
+
