@@ -21,7 +21,6 @@ head(data)
 tail(data)
 summary(data)
 
-
 # Changing variable name "1gender" since it starts with a number
 data <- data %>% 
   rename(gender = '1gender')
