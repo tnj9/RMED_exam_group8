@@ -8,34 +8,29 @@
 # Project: RMED_exam_group8
 #-------------------------------------------###
 
-# Load libraries
+#load libraries
 library(tidyverse)
-library(tidyr)
+library(readr)
 library(here)
+library(skimr)
 
-# Import data
-data <- read_delim(here("DATA", "exam_dataset.txt"))
+read_tsv("exam_dataset.txt")
+#Got ERROR
 
-#explore data
+read_delim(here("DATA","exam_dataset.txt"))
+#Chose delim as the others in the group. Downloaded library "here"and revised the code - worked! 
+
+data<-read_delim(here("DATA","exam_dataset.txt"))
+data
+
+#exploring data
 head(data)
 tail(data)
 summary(data)
+glimpse(data)
+skimr::skim(data)
 
-# Changing variable name "1gender" since it starts with a number
-data <- data %>% 
-  rename(gender = '1gender')
+#overview of the updated data
+view(data)
 
-#checking if two variables (gender) are duplicates
-data$preOp_gender==data$gender
-
-#confirmed that preOp_gender== gender
-#deleting preOp_gender since it is a duplicate
-data$preOp_gender = NULL
-
-# Separate the preOp_ASA_Mallampati into: ASA_score and Mallampati_score
-data <- data %>%
-  separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_")
-
-# View the updated data
-colnames(data)
 
