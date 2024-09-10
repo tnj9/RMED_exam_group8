@@ -12,9 +12,12 @@
 library(tidyverse)
 library(tidyr)
 library(here)
+library(lubridate)
+library(dplyr)
 
 # Import data
 data <- read_delim(here("DATA", "exam_dataset.txt"))
+joindata <- read_delim(here("DATA", "exam_joindata.txt"))
 
 #explore data
 head(data)
@@ -50,4 +53,35 @@ data$year_month <- dmy(paste("01", data$month, data$year, sep = "-"))
 data$year <- NULL
 data$month <- NULL
 
+<<<<<<< HEAD
+=======
+#changing the column order and renaming 3 variables
+data<- data %>%
+  rename(age=preOp_age) %>%
+  rename (smoking=preOp_smoking) %>%
+  rename(date=year_month) %>%
+  select(patient_id,BMI,age,smoking,gender, date, everything())
+
+# Looking for duplicate rows
+data %>%
+  group_by_all() %>%
+  filter(n()>1) %>%
+  ungroup()
+
+# remove duplicate rows
+data <- data %>%
+  distinct(.keep_all = T)
+
+#check that the duplicate has been removed
+data %>%
+  filter(patient_id==48)
+
+#arranging the patient ID
+data <- data %>%
+  arrange(patient_id)
+
+#joining dataset inton main dataset
+combined_data<- data %>%
+  full_join(joindata, join_by("patient_id"))
+>>>>>>> 849ed0d5b751d0500b2ca725c8b69b8bb3642cec
 
