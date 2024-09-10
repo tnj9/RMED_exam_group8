@@ -64,7 +64,6 @@ str(data)
 head(data)
 tail(data)
 summary(data)
-colnames(data)
 
 ###########################
 # Rearranging the dataset #
@@ -96,7 +95,7 @@ data <- data %>%
 unique(data$preOp_gender == data$gender)
 
 # Confirmed that preOp_gender == gender
-# deleting preOp_gender since it is a duplicate column
+# deleting column preOp_gender since it is a duplicate 
 data$preOp_gender <- NULL
 
 #---- Checking for duplicate rows -----------------------------
