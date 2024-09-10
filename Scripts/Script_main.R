@@ -50,3 +50,8 @@ data$year_month <- dmy(paste("01", data$month, data$year, sep = "-"))
 data$year <- NULL
 data$month <- NULL
 
+#changing the column order
+data<- data %>%
+  select(patient_id,year_month,preOp_age,gender,BMI,preOp_smoking,preOp_pain,treat,Mallampati_score,ASA_score, everything())
+
+
