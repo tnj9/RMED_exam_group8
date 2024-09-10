@@ -49,5 +49,5 @@ data$year_month <- dmy(paste("01", data$month, data$year, sep = "-"))
 # Remove year and month columns
 data$year <- NULL
 data$month <- NULL
->>>>>>> 019ec0b24d14a94a648a1885274f234176b7dca3
+
 
