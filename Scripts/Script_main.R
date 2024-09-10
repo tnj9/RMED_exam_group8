@@ -12,6 +12,8 @@
 library(tidyverse)
 library(tidyr)
 library(here)
+library(lubridate)
+library(dplyr)
 
 # Import data
 data <- read_delim(here("DATA", "exam_dataset.txt"))
@@ -43,7 +45,6 @@ data <- data %>%
 # View the updated data
 colnames(data)
 
-
 # Combine year and month into a single column as a date format.
 data$year_month <- dmy(paste("01", data$month, data$year, sep = "-"))
 
@@ -58,4 +59,17 @@ data<- data %>%
   rename(date=year_month) %>%
   select(patient_id,BMI,age,smoking,gender,everything())
 
-#Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
+# Looking for duplicate rows
+data %>%
+  group_by_all() %>%
+  filter(n()>1) %>%
+  ungroup()
+
+# remove duplicate rows
+data <- data %>%
+  distinct(.keep_all = T)
+
+#check that the duplicate has been removed
+data %>%
+  filter(patient_id==48)
+
