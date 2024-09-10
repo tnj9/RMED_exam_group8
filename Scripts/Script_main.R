@@ -12,6 +12,8 @@
 library(tidyverse)
 library(tidyr)
 library(here)
+library(lubridate)
+library(dplyr)
 
 # Import data
 data <- read_delim(here("DATA", "exam_dataset.txt"))
@@ -54,4 +56,17 @@ data$month <- NULL
 data<- data %>%
   select(patient_id,year_month,preOp_age,gender,BMI,preOp_smoking,preOp_pain,treat,Mallampati_score,ASA_score, everything())
 
+# Looking for duplicate rows
+data %>%
+  group_by_all() %>%
+  filter(n()>1) %>%
+  ungroup()
+
+# remove duplicate rows
+data <- data %>%
+  distinct(.keep_all = T)
+
+#check that the duplicate has been removed
+data %>%
+  filter(patient_id==48)
 
