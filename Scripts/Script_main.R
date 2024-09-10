@@ -73,3 +73,6 @@ data <- data %>%
 data %>%
   filter(patient_id==48)
 
+#arranging the patient ID
+data <- data %>%
+  arrange(patient_id)
