@@ -1,4 +1,4 @@
-#---- Main Script-----------------------------------
+#---- Tidy Script-----------------------------------
 # Script_creation_date: 09.09.24
 # last_modified_date: 10.09.24
 # Author: Eirik Røys,Tuva N Jensen, Kathrine Brun
@@ -18,10 +18,10 @@
 # - a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
 # - a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
 # - a column coding gender to "Male" and "Female" instead of "0"/"1"
-# - Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
+# ✔  Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
 # ✔ Arrange patient_id column of your dataset in order of increasing number or alphabetically.
 # - Connect above steps with pipe.
-# - Explore your data.
+# ✔ Explore your data.
 # - Explore and comment on the missing variables.
 # - Stratify your data by a categorical column and report min, max, mean and sd of a numeric column.
 # - Stratify your data by a categorical column and report min, max, mean and sd of a numeric column for a defined set of observations - use pipe!
