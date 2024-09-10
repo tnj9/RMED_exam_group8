@@ -17,6 +17,7 @@ library(dplyr)
 
 # Import data
 data <- read_delim(here("DATA", "exam_dataset.txt"))
+joindata <- read_delim(here("DATA", "exam_joindata.txt"))
 
 #explore data
 head(data)
@@ -57,7 +58,7 @@ data<- data %>%
   rename(age=preOp_age) %>%
   rename (smoking=preOp_smoking) %>%
   rename(date=year_month) %>%
-  select(patient_id,BMI,age,smoking,gender,everything())
+  select(patient_id,BMI,age,smoking,gender, date, everything())
 
 # Looking for duplicate rows
 data %>%
@@ -76,3 +77,8 @@ data %>%
 #arranging the patient ID
 data <- data %>%
   arrange(patient_id)
+
+#joining dataset inton main dataset
+combined_data<- data %>%
+  full_join(joindata, join_by("patient_id"))
+
