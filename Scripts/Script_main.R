@@ -43,3 +43,9 @@ data <- data %>%
 # View the updated data
 colnames(data)
 
+# Combine year and month into a single column as a date format.
+data$year_month <- dmy(paste("01", data$month, data$year, sep = "-"))
+
+# Remove year and month columns
+data$year <- NULL
+data$month <- NULL
