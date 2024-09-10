@@ -51,7 +51,8 @@ data <- data %>%
 # Specifying variable types #
 #############################
 
-# "Make necessary changes in variable types"
+# Task: "Make necessary changes in variable types"
+# Check against the specified variables in codebook
 # data <- data %>%
 #   mutate(
 #     patient_id = as.numeric(patient_id),            
