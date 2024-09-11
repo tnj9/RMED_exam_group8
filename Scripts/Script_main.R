@@ -45,7 +45,7 @@ data <- read_delim(here("DATA", "exam_dataset.txt"))
 joindata <- read_delim(here("DATA", "exam_joindata.txt"))
 
 # Join the two datasets
-data <- data %>%
+combined_data <- data %>%
   full_join(joindata, join_by("patient_id"), relationship = "many-to-many")
 
 #############################
@@ -54,17 +54,27 @@ data <- data %>%
 
 # Task: "Make necessary changes in variable types"
 # Check against the specified variables in codebook
-# data <- data %>%
-#   mutate(
-#     patient_id = as.numeric(patient_id),            
-#     month = as.numeric(month),                     
-#    ...
+
+# check variable type
+str(combined_data)
+
+# change variable type to what is in the codebook
+ combined_data <- data %>%
+   mutate(preOp_ASA_Mallampati = as.factor(preOp_ASA_Mallampati),
+          preOp_smoking = as.factor(preOp_smoking),
+          preOp_pain = as.factor(preOp_pain),
+          treat = as.factor(treat),
+          pacu30min_cough = as.factor(pacu30min_cough),
+          pacu90min_cough = as.factor(pacu90min_cough),
+          postOp4hour_cough = as.factor(postOp4hour_cough),
+          pod1am_cough = as.factor(pod1am_cough))
+ 
 
 # Explore the data
-str(data)
-head(data)
-tail(data)
-summary(data)
+str(combined_data)
+head(combined_data)
+tail(combined_data)
+summary(combined_data)
 
 ###########################
 # Rearranging the dataset #
