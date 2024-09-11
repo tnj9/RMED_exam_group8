@@ -1,12 +1,37 @@
-#----Main Script-------------------------####
-# Date: 09.09.24
+#---- Tidy Script-----------------------------------
+# Script_creation_date: 09.09.24
+# last_modified_date: 10.09.24
 # Author: Eirik Røys,Tuva N Jensen, Kathrine Brun
-# Filename: Script_main.R    
-# Description:  
-#               
-#               
+# Filename: Script_main.R
+# Description:
+#
+#
 # Project: RMED_exam_group8
-#-------------------------------------------###
+
+#--------------------------------------------------
+
+#---- Remaining tasks -----------------------------
+# ✔ Remove unnecessary columns from your dataframe: `year, month` 
+# ✔ Read and join the additional dataset to your main dataset.
+# - Make necessary changes in variable types
+# - Create a set of new columns:
+# - a column showing whether severity of cough changed from "extubation" to "pod1am"
+# - a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
+# - a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
+# - a column coding gender to "Male" and "Female" instead of "0"/"1"
+# ✔  Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
+# ✔ Arrange patient_id column of your dataset in order of increasing number or alphabetically.
+# - Connect above steps with pipe.
+# ✔ Explore your data.
+# - Explore and comment on the missing variables.
+# - Stratify your data by a categorical column and report min, max, mean and sd of a numeric column.
+# - Stratify your data by a categorical column and report min, max, mean and sd of a numeric column for a defined set of observations - use pipe!
+# - Only for persons with BMI <25
+# - Only for females
+# - Only for persons older than 50 years of age
+# - Only for persons who had experienced coughing at extubation
+# - Use two categorical columns in your dataset to create a table (hint: ?count)
+#----------------------------------------------
 
 # Load libraries
 library(tidyverse)
@@ -19,69 +44,84 @@ library(dplyr)
 data <- read_delim(here("DATA", "exam_dataset.txt"))
 joindata <- read_delim(here("DATA", "exam_joindata.txt"))
 
-#explore data
-head(data)
-tail(data)
-summary(data)
+# Join the two datasets
+combined_data <- data %>%
+  full_join(joindata, join_by("patient_id"), relationship = "many-to-many")
 
-# Changing variable name "1gender" since it starts with a number
-data <- data %>% 
-  rename(gender = '1gender')
+#############################
+# Specifying variable types #
+#############################
 
-# Changing variable name "BMI kg/m2" to BMI
+# Task: "Make necessary changes in variable types"
+# Check against the specified variables in codebook
+
+# check variable type
+str(combined_data)
+
+# change variable type to what is in the codebook
+ combined_data <- data %>%
+   mutate(preOp_ASA_Mallampati = as.factor(preOp_ASA_Mallampati),
+          preOp_smoking = as.factor(preOp_smoking),
+          preOp_pain = as.factor(preOp_pain),
+          treat = as.factor(treat),
+          pacu30min_cough = as.factor(pacu30min_cough),
+          pacu90min_cough = as.factor(pacu90min_cough),
+          postOp4hour_cough = as.factor(postOp4hour_cough),
+          pod1am_cough = as.factor(pod1am_cough))
+ 
+
+# Explore the data
+str(combined_data)
+head(combined_data)
+tail(combined_data)
+summary(combined_data)
+
+###########################
+# Rearranging the dataset #
+###########################
+
 data <- data %>%
-  rename(BMI = `BMI kg/m2`)
+  # Renaming columns
+  rename(gender = "1gender") %>%
+  rename(BMI = `BMI kg/m2`) %>%
+  rename(age = preOp_age) %>%
+  rename(smoking = preOp_smoking) %>%
+  # Combine month and year into a single column 'date' and convert to day-month-year format
+  mutate(date = paste("01", month, year, sep = "-")) %>%
+  mutate(date = dmy(date)) %>%
+  # Split column 'preOp_ASA_Mallampati' into 'ASA_score' and 'Mallampati score'
+  separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_") %>%
+  # Sort rows based on patient IDs
+  arrange(patient_id) %>%
+  # Reordering columns and selecting which to keep
+  select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
 
-#checking if two variables (gender) are duplicates
-data$preOp_gender==data$gender
+###########################
+# Checking for duplicates #
+###########################
 
-#confirmed that preOp_gender== gender
-#deleting preOp_gender since it is a duplicate
-data$preOp_gender = NULL
+# ---- Checking for Duplicate columns ------------------------------
+# Two columns are referencing 'gender' - 
+# checking if they are duplicate
+unique(data$preOp_gender == data$gender)
 
-# Separate the preOp_ASA_Mallampati into: ASA_score and Mallampati_score
-data <- data %>%
-  separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_")
+# Confirmed that preOp_gender == gender
+# deleting column preOp_gender since it is a duplicate 
+data$preOp_gender <- NULL
 
-# View the updated data
-colnames(data)
-
-# Combine year and month into a single column as a date format.
-data$year_month <- dmy(paste("01", data$month, data$year, sep = "-"))
-
-# Remove year and month columns
-data$year <- NULL
-data$month <- NULL
-
-<<<<<<< HEAD
-=======
-#changing the column order and renaming 3 variables
-data<- data %>%
-  rename(age=preOp_age) %>%
-  rename (smoking=preOp_smoking) %>%
-  rename(date=year_month) %>%
-  select(patient_id,BMI,age,smoking,gender, date, everything())
-
-# Looking for duplicate rows
+#---- Checking for duplicate rows -----------------------------
 data %>%
   group_by_all() %>%
-  filter(n()>1) %>%
-  ungroup()
+  filter(n() > 1) %>%
 
 # remove duplicate rows
 data <- data %>%
-  distinct(.keep_all = T)
+  distinct(.keep_all = TRUE)
 
-#check that the duplicate has been removed
+# comfirm that the duplicate has been removed
 data %>%
   filter(patient_id==48)
 
 #arranging the patient ID
 data <- data %>%
   arrange(patient_id)
-
-#joining dataset inton main dataset
-combined_data<- data %>%
-  full_join(joindata, join_by("patient_id"))
->>>>>>> 849ed0d5b751d0500b2ca725c8b69b8bb3642cec
-
