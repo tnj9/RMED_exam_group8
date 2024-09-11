@@ -39,6 +39,7 @@ library(tidyr)
 library(here)
 library(lubridate)
 library(dplyr)
+library(skimr)
 
 # Import data
 data <- read_delim(here("DATA", "exam_dataset.txt"))
@@ -47,6 +48,16 @@ joindata <- read_delim(here("DATA", "exam_joindata.txt"))
 # Join the two datasets
 combined_data <- data %>%
   full_join(joindata, join_by("patient_id"), relationship = "many-to-many")
+
+# Identify rows with any NA values
+na_rows <- combined_data %>%
+  filter(if_any(everything(), is.na))
+print(na_rows)
+
+# Only two patients have NA values - appear to missing postOp values
+# Choosing to remove NA
+combined_data <- combined_data %>%
+  drop_na()
 
 #############################
 # Specifying variable types #
@@ -96,8 +107,8 @@ combined_data <- combined_data %>%
   arrange(patient_id) %>%
   #adding new coloumns to the dataset
   mutate(
-    postop_cough_change_extubation = extubation_cough - pod1am_cough,  
-    postop_throatpain_change = pacu30min_throatPain - pod1am_throatPain) %>% 
+  postop_cough_change_extubation = extubation_cough - pod1am_cough,  
+  postop_throatpain_change = pacu30min_throatPain - pod1am_throatPain) %>% 
   #cut BMI into quartiles (4 equal parts)
   mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
                           include.lowest = TRUE, 
