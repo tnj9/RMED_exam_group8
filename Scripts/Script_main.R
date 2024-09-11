@@ -80,7 +80,7 @@ summary(combined_data)
 # Rearranging the dataset #
 ###########################
 
-data <- data %>%
+combined_data <- combined_data %>%
   # Renaming columns
   rename(gender = "1gender") %>%
   rename(BMI = `BMI kg/m2`) %>%
@@ -103,25 +103,28 @@ data <- data %>%
 # ---- Checking for Duplicate columns ------------------------------
 # Two columns are referencing 'gender' - 
 # checking if they are duplicate
-unique(data$preOp_gender == data$gender)
+unique(combined_data$preOp_gender == combined_data$gender)
 
 # Confirmed that preOp_gender == gender
 # deleting column preOp_gender since it is a duplicate 
-data$preOp_gender <- NULL
+combined_data$preOp_gender <- NULL
 
 #---- Checking for duplicate rows -----------------------------
-data %>%
+# Check for duplicate rows and remove them
+combined_data <- combined_data %>%
   group_by_all() %>%
-  filter(n() > 1) %>%
+  filter(n() == 1) %>%
+  ungroup()
 
 # remove duplicate rows
-data <- data %>%
+combined_data <- combined_data %>%
   distinct(.keep_all = TRUE)
 
 # comfirm that the duplicate has been removed
-data %>%
+combined_data %>%
   filter(patient_id==48)
 
 #arranging the patient ID
-data <- data %>%
+combined_data <- combined_data %>%
   arrange(patient_id)
+
