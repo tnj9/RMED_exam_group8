@@ -151,3 +151,30 @@ combined_data %>%
 #arranging the patient ID
 combined_data <- combined_data %>%
   arrange(patient_id)
+
+
+###########################
+#     Stratifying data    #
+###########################
+
+#---- Stratifying data -----------------------------
+
+# Task: 
+#Stratify your data by a categorical column and report min, max, mean and sd of a numeric column.
+combined_data %>% 
+  filter(gender == "Female") %>% 
+  summarise(min(age), max(age), mean(age), sd(age))
+
+# Task:
+# Stratify your data by a categorical column and report min, max, mean and sd of a numeric column for a defined set of observations - use pipe!
+# - Only for persons with BMI <25
+# - Only for females
+# - Only for persons older than 50 years of age
+# - Only for persons who had experienced coughing at extubation
+
+combined_data %>% 
+  filter(BMI < 25 ) %>% 
+  filter(gender == "Female") %>% 
+  filter(age > 50) %>% 
+  filter(extubation_cough == 1) %>% 
+  summarise(min(age), max(age), mean(age), sd(age))
