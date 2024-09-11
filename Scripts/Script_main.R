@@ -89,7 +89,7 @@ data <- data %>%
 # Checking for duplicates #
 ###########################
 
-# ---- Checking for Duplicate columns -----------------------------
+# ---- Checking for Duplicate columns ------------------------------
 # Two columns are referencing 'gender' - 
 # checking if they are duplicate
 unique(data$preOp_gender == data$gender)
