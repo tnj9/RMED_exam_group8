@@ -7,6 +7,7 @@
 #
 #
 # Project: RMED_exam_group8
+
 #--------------------------------------------------
 
 #---- Remaining tasks -----------------------------
@@ -102,7 +103,6 @@ data$preOp_gender <- NULL
 data %>%
   group_by_all() %>%
   filter(n() > 1) %>%
-  ungroup()
 
 # remove duplicate rows
 data <- data %>%
@@ -112,5 +112,3 @@ data <- data %>%
 data %>%
   filter(patient_id == 48)
 data
-
-
