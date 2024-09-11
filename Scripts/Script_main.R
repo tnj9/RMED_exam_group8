@@ -13,12 +13,12 @@
 #---- Remaining tasks -----------------------------
 # ✔ Remove unnecessary columns from your dataframe: `year, month` 
 # ✔ Read and join the additional dataset to your main dataset.
-# ✔ Make necessary changes in variable types
+# - Make necessary changes in variable types
 # - Create a set of new columns:
-# ✔ a column showing whether severity of cough changed from "extubation" to "pod1am"
-# ✔ a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
-# ✔ a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
-# ✔ a column coding gender to "Male" and "Female" instead of "0"/"1"
+# - a column showing whether severity of cough changed from "extubation" to "pod1am"
+# - a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
+# - a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
+# - a column coding gender to "Male" and "Female" instead of "0"/"1"
 # ✔  Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
 # ✔ Arrange patient_id column of your dataset in order of increasing number or alphabetically.
 # - Connect above steps with pipe.
@@ -54,22 +54,11 @@ combined_data <- data %>%
 
 # Task: "Make necessary changes in variable types"
 # Check against the specified variables in codebook
-
-# check variable type
-str(combined_data)
-
-# change variable type to what is in the codebook
- combined_data <- combined_data %>%
-   mutate(preOp_ASA_Mallampati = as.factor(preOp_ASA_Mallampati),
-          preOp_smoking = as.factor(preOp_smoking),
-          preOp_pain = as.factor(preOp_pain),
-          treat = as.factor(treat),
-          pacu30min_cough = as.factor(pacu30min_cough),
-          pacu90min_cough = as.factor(pacu90min_cough),
-          postOp4hour_cough = as.factor(postOp4hour_cough),
-          pod1am_cough = as.numeric(pod1am_cough),
-          extubation_cough = as.numeric(extubation_cough))
- 
+# data <- data %>%
+#   mutate(
+#     patient_id = as.numeric(patient_id),            
+#     month = as.numeric(month),                     
+#    ...
 
 # Explore the data
 str(combined_data)
@@ -81,7 +70,7 @@ summary(combined_data)
 # Rearranging the dataset #
 ###########################
 
-combined_data <- combined_data %>%
+data <- data %>%
   # Renaming columns
   rename(gender = "1gender") %>%
   rename(BMI = `BMI kg/m2`) %>%
@@ -94,21 +83,9 @@ combined_data <- combined_data %>%
   separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_") %>%
   # Sort rows based on patient IDs
   arrange(patient_id) %>%
-  #adding new coloumns to the dataset
-  mutate(
-    postop_cough_change_extubation = extubation_cough - pod1am_cough,  
-    postop_throatpain_change = pacu30min_throatPain - pod1am_throatPain) %>% 
-  #cut BMI into quartiles (4 equal parts)
-  mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
-                          include.lowest = TRUE, 
-                          labels = c("Q1", "Q2", "Q3", "Q4"))) %>% 
-  
-  # added column coding gender to "Male" and "Female" instead of "0"/"1"
-  mutate(gender=factor(gender,levels=c(0,1),labels=c("Male", "Female"))) %>% 
-
   # Reordering columns and selecting which to keep
   select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
-  
+
 ###########################
 # Checking for duplicates #
 ###########################
@@ -116,28 +93,22 @@ combined_data <- combined_data %>%
 # ---- Checking for Duplicate columns ------------------------------
 # Two columns are referencing 'gender' - 
 # checking if they are duplicate
-unique(combined_data$preOp_gender == combined_data$gender)
+unique(data$preOp_gender == data$gender)
 
 # Confirmed that preOp_gender == gender
 # deleting column preOp_gender since it is a duplicate 
-combined_data$preOp_gender <- NULL
+data$preOp_gender <- NULL
 
 #---- Checking for duplicate rows -----------------------------
-# Check for duplicate rows and remove them
-combined_data <- combined_data %>%
+data %>%
   group_by_all() %>%
-  filter(n() == 1) %>%
-  ungroup()
+  filter(n() > 1) %>%
 
 # remove duplicate rows
-combined_data <- combined_data %>%
+data <- data %>%
   distinct(.keep_all = TRUE)
 
 # comfirm that the duplicate has been removed
-combined_data %>%
-  filter(patient_id==48)
-
-#arranging the patient ID
-combined_data <- combined_data %>%
-  arrange(patient_id)
-
+data %>%
+  filter(patient_id == 48)
+dataS
