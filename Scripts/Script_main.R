@@ -15,9 +15,9 @@
 # ✔ Read and join the additional dataset to your main dataset.
 # - Make necessary changes in variable types
 # - Create a set of new columns:
-# - a column showing whether severity of cough changed from "extubation" to "pod1am"
-# - a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
-# - a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
+# ✔ a column showing whether severity of cough changed from "extubation" to "pod1am"
+# ✔ a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
+# ✔a  column cutting BMI into quartiles (4 equal parts); HINT: cut() function
 # - a column coding gender to "Male" and "Female" instead of "0"/"1"
 # ✔  Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
 # ✔ Arrange patient_id column of your dataset in order of increasing number or alphabetically.
@@ -86,6 +86,23 @@ data <- data %>%
   # Reordering columns and selecting which to keep
   select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
 
+#adding new coloumns to the dataset
+data<- data %>% 
+  mutate(
+    postop_cough_change_extubation =extubation_cough - pod1am_cough,  
+    postop_throatpain_change = pacu30min_throatPain - pod1am_throatPain) 
+
+
+#a column cutting BMI into quartiles (4 equal parts)
+data<- data %>% 
+  mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
+                          include.lowest = TRUE, 
+                          labels = c("Q1", "Q2", "Q3", "Q4")))
+
+
+# - a column coding gender to "Male" and "Female" instead of "0"/"1"  
+
+
 ###########################
 # Checking for duplicates #
 ###########################
@@ -112,3 +129,4 @@ data <- data %>%
 data %>%
   filter(patient_id == 48)
 data
+
