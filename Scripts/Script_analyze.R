@@ -20,7 +20,7 @@ data$treat <- factor(data$treat)
 boxplot_treat <- ggplot(data, aes(x = treat, y = age, fill = treat)) +
   geom_boxplot() +
   scale_fill_manual(values = c("0" = "#FBADA7", "1" = "#64B8B8")) +
-  scale_y_continuous(breaks = c(10, 20, 30, 40, 50, 60, 70, 80, 90), limits = c(10, 90)) +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
   labs(title = "Box-plot") +
   theme_classic() +
   coord_flip()  
@@ -29,7 +29,7 @@ boxplot_treat <- ggplot(data, aes(x = treat, y = age, fill = treat)) +
 histogram_treat <- ggplot(data, aes(y = age, fill = treat)) +
   geom_histogram(binwidth = 10, position = "dodge", color = "black") +
   scale_fill_manual(values = c("0" = "#FBADA7", "1" = "#64B8B8")) +
-  scale_y_continuous(breaks = c(10, 20, 30, 40, 50, 60, 70, 80, 90), limits = c(10, 90)) +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
   labs(title = "Histogram") +
   theme_classic() +
   coord_flip()  
@@ -48,7 +48,7 @@ Age_vs_treat_plot
 boxplot_gender <- ggplot(data, aes(x = gender, y = age, fill = gender)) +
   geom_boxplot() +
   scale_fill_manual(values = c("Female" = "#FBADA7", "Male" = "#64B8B8")) +
-  scale_y_continuous(breaks = c(10, 20, 30, 40, 50, 60, 70, 80, 90), limits = c(10, 90)) +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
   labs(title = "Box-plot") +
   theme_classic() +
   coord_flip() 
@@ -57,7 +57,7 @@ boxplot_gender <- ggplot(data, aes(x = gender, y = age, fill = gender)) +
 histogram_gender <- ggplot(data, aes(y = age, fill = gender)) +
   geom_histogram(binwidth = 10, position = "dodge", color = "black") +
   scale_fill_manual(values = c("Female" = "#FBADA7", "Male" = "#64B8B8")) +
-  scale_y_continuous(breaks = c(10, 20, 30, 40, 50, 60, 70, 80, 90), limits = c(10, 90)) +
+  scale_y_continuous(breaks = c(0 ,10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
   labs(title = "Histogram") +
   theme_classic() +
   coord_flip() 
