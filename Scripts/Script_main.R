@@ -70,17 +70,17 @@ combined_data <- combined_data %>%
 str(combined_data)
 
 # change variable type to what is in the codebook
- combined_data <- combined_data %>%
-   mutate(preOp_ASA_Mallampati = as.factor(preOp_ASA_Mallampati),
-          preOp_smoking = as.factor(preOp_smoking),
-          preOp_pain = as.factor(preOp_pain),
-          treat = as.factor(treat),
-          pacu30min_cough = as.factor(pacu30min_cough),
-          pacu90min_cough = as.factor(pacu90min_cough),
-          postOp4hour_cough = as.factor(postOp4hour_cough),
-          pod1am_cough = as.numeric(pod1am_cough),
-          extubation_cough = as.numeric(extubation_cough))
- 
+combined_data <- combined_data %>%
+  mutate(preOp_ASA_Mallampati = as.factor(preOp_ASA_Mallampati),
+         preOp_smoking = as.factor(preOp_smoking),
+         preOp_pain = as.factor(preOp_pain),
+         treat = as.factor(treat),
+         pacu30min_cough = as.factor(pacu30min_cough),
+         pacu90min_cough = as.factor(pacu90min_cough),
+         postOp4hour_cough = as.factor(postOp4hour_cough),
+         pod1am_cough = as.numeric(pod1am_cough),
+         extubation_cough = as.numeric(extubation_cough))
+
 
 # Explore the data
 str(combined_data)
@@ -107,8 +107,8 @@ combined_data <- combined_data %>%
   arrange(patient_id) %>%
   #adding new coloumns to the dataset
   mutate(
-  postop_cough_change_extubation = extubation_cough - pod1am_cough,  
-  postop_throatpain_change = pacu30min_throatPain - pod1am_throatPain) %>% 
+    postop_cough_change_extubation = extubation_cough - pod1am_cough,  
+    postop_throatpain_change = pacu30min_throatPain - pod1am_throatPain) %>% 
   #cut BMI into quartiles (4 equal parts)
   mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
                           include.lowest = TRUE, 
@@ -116,10 +116,10 @@ combined_data <- combined_data %>%
   
   # added column coding gender to "Male" and "Female" instead of "0"/"1"
   mutate(gender=factor(gender,levels=c(0,1),labels=c("Male", "Female"))) %>% 
-
+  
   # Reordering columns and selecting which to keep
   select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
-  
+
 ###########################
 # Checking for duplicates #
 ###########################
@@ -151,4 +151,3 @@ combined_data %>%
 #arranging the patient ID
 combined_data <- combined_data %>%
   arrange(patient_id)
-
