@@ -8,6 +8,7 @@
 #
 # Project: RMED_exam_group8
 
+
 #--------------------------------------------------
 
 #---- Remaining tasks -----------------------------
@@ -129,4 +130,6 @@ data <- data %>%
 data %>%
   filter(patient_id == 48)
 data
+
+
 
