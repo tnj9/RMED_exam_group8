@@ -157,5 +157,6 @@ combined_data %>%
   count(gender, BMI_quartile) %>%
   arrange(gender, BMI_quartile)
 
+write_csv2(combined_data, file = here("DATA", "clean_data.csv"))
 
 
