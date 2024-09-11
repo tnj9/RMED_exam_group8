@@ -1,5 +1,4 @@
 #   T Are there any correlated measurements?
-
 #   K Does the preoperative pain change with age of the patients?
 #   T Do BMI and age have a linear relationship?
 
@@ -19,7 +18,7 @@ data$treat <- factor(data$treat)
 # Boxplot Age vs. Treat 
 boxplot_treat <- ggplot(data, aes(x = treat, y = age, fill = treat)) +
   geom_boxplot() +
-  scale_fill_manual(values = c("0" = "#FBADA7", "1" = "#64B8B8")) +
+  scale_fill_manual(values = c("0" = "#E1E1E1", "1" = "#649CB8")) +
   scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
   labs(title = "Box-plot") +
   theme_classic() +
@@ -28,7 +27,7 @@ boxplot_treat <- ggplot(data, aes(x = treat, y = age, fill = treat)) +
 # Histogram Age vs. Treat 
 histogram_treat <- ggplot(data, aes(y = age, fill = treat)) +
   geom_histogram(binwidth = 10, position = "dodge", color = "black") +
-  scale_fill_manual(values = c("0" = "#FBADA7", "1" = "#64B8B8")) +
+  scale_fill_manual(values = c("0" = "#E1E1E1", "1" = "#649CB8")) +
   scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
   labs(title = "Histogram") +
   theme_classic() +
