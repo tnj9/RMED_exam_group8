@@ -10,29 +10,6 @@
 
 #--------------------------------------------------
 
-#---- Remaining tasks -----------------------------
-# ✔ Remove unnecessary columns from your dataframe: `year, month` 
-# ✔ Read and join the additional dataset to your main dataset.
-# ✔ Make necessary changes in variable types
-# ✔ Create a set of new columns:
-# ✔ a column showing whether severity of cough changed from "extubation" to "pod1am"
-# ✔ a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
-# ✔ a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
-# ✔ a column coding gender to "Male" and "Female" instead of "0"/"1"
-# ✔  Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
-# ✔ Arrange patient_id column of your dataset in order of increasing number or alphabetically.
-# ✔ Connect above steps with pipe.
-# ✔ Explore your data.
-# ✔ Explore and comment on the missing variables.
-# ✔ Stratify your data by a categorical column and report min, max, mean and sd of a numeric column.
-# ✔ Stratify your data by a categorical column and report min, max, mean and sd of a numeric column for a defined set of observations - use pipe!
-# ✔ Only for persons with BMI <25
-# ✔ Only for females
-# ✔ Only for persons older than 50 years of age
-# ✔ Only for persons who had experienced coughing at extubation
-# - Use two categorical columns in your dataset to create a table (hint: ?count)
-#----------------------------------------------
-
 # Load libraries
 library(tidyverse)
 library(tidyr)
@@ -78,8 +55,8 @@ combined_data <- combined_data %>%
          pacu30min_cough = as.factor(pacu30min_cough),
          pacu90min_cough = as.factor(pacu90min_cough),
          postOp4hour_cough = as.factor(postOp4hour_cough),
-         pod1am_cough = as.numeric(pod1am_cough),
-         extubation_cough = as.numeric(extubation_cough))
+         pod1am_cough = as.factor(pod1am_cough),
+         extubation_cough = as.factor(extubation_cough))
 
 
 # Explore the data
@@ -107,8 +84,8 @@ combined_data <- combined_data %>%
   arrange(patient_id) %>%
   #adding new coloumns to the dataset
   mutate(
-    postop_cough_change_extubation = extubation_cough - pod1am_cough,  
-    postop_throatpain_change = pacu30min_throatPain - pod1am_throatPain) %>% 
+    postop_cough_change_extubation = as.numeric(extubation_cough) - as.numeric(pod1am_cough),  
+    postop_throatpain_change = as.numeric(pacu30min_throatPain) - as.numeric(pod1am_throatPain)) %>% 
   #cut BMI into quartiles (4 equal parts)
   mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
                           include.lowest = TRUE, 
@@ -119,6 +96,7 @@ combined_data <- combined_data %>%
   
   # Reordering columns and selecting which to keep
   select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
+
 
 ###########################
 # Checking for duplicates #
@@ -167,14 +145,17 @@ combined_data %>%
 
 # Task:
 # Stratify your data by a categorical column and report min, max, mean and sd of a numeric column for a defined set of observations - use pipe!
-# - Only for persons with BMI <25
-# - Only for females
-# - Only for persons older than 50 years of age
-# - Only for persons who had experienced coughing at extubation
-
 combined_data %>% 
   filter(BMI < 25 ) %>% 
   filter(gender == "Female") %>% 
   filter(age > 50) %>% 
-  filter(extubation_cough == 1) %>% 
+  filter(extubation_cough = TRUE) %>% 
   summarise(min(age), max(age), mean(age), sd(age))
+
+# Create a table using two categorical columns (gender and BMI_quartile)
+combined_data %>%
+  count(gender, BMI_quartile) %>%
+  arrange(gender, BMI_quartile)
+
+
+
