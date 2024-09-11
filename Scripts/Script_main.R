@@ -14,22 +14,22 @@
 # ✔ Remove unnecessary columns from your dataframe: `year, month` 
 # ✔ Read and join the additional dataset to your main dataset.
 # ✔ Make necessary changes in variable types
-# - Create a set of new columns:
+# ✔ Create a set of new columns:
 # ✔ a column showing whether severity of cough changed from "extubation" to "pod1am"
 # ✔ a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
 # ✔ a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
 # ✔ a column coding gender to "Male" and "Female" instead of "0"/"1"
 # ✔  Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
 # ✔ Arrange patient_id column of your dataset in order of increasing number or alphabetically.
-# - Connect above steps with pipe.
+# ✔ Connect above steps with pipe.
 # ✔ Explore your data.
-# - Explore and comment on the missing variables.
-# - Stratify your data by a categorical column and report min, max, mean and sd of a numeric column.
-# - Stratify your data by a categorical column and report min, max, mean and sd of a numeric column for a defined set of observations - use pipe!
-# - Only for persons with BMI <25
-# - Only for females
-# - Only for persons older than 50 years of age
-# - Only for persons who had experienced coughing at extubation
+# ✔ Explore and comment on the missing variables.
+# ✔ Stratify your data by a categorical column and report min, max, mean and sd of a numeric column.
+# ✔ Stratify your data by a categorical column and report min, max, mean and sd of a numeric column for a defined set of observations - use pipe!
+# ✔ Only for persons with BMI <25
+# ✔ Only for females
+# ✔ Only for persons older than 50 years of age
+# ✔ Only for persons who had experienced coughing at extubation
 # - Use two categorical columns in your dataset to create a table (hint: ?count)
 #----------------------------------------------
 
