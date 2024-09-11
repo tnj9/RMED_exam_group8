@@ -6,6 +6,8 @@
 #Load libraries
 library(here)
 library(tidyverse)
+library(ggplot2)
+library(patchwork)
 
 data <- read.csv2(here("DATA", "clean_data.csv"))
 
