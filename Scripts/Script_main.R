@@ -18,7 +18,7 @@
 # ✔ a column showing whether severity of cough changed from "extubation" to "pod1am"
 # ✔ a column showing whether severity of throat pain changed from "pacu30min" to "pod1am"
 # ✔ a column cutting BMI into quartiles (4 equal parts); HINT: cut() function
-# - a column coding gender to "Male" and "Female" instead of "0"/"1"
+# ✔ a column coding gender to "Male" and "Female" instead of "0"/"1"
 # ✔  Set the order of columns as: `patient_id, BMI, age, smoking, gender` and other columns
 # ✔ Arrange patient_id column of your dataset in order of increasing number or alphabetically.
 # - Connect above steps with pipe.
@@ -102,6 +102,10 @@ combined_data <- combined_data %>%
   mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
                           include.lowest = TRUE, 
                           labels = c("Q1", "Q2", "Q3", "Q4"))) %>% 
+  
+  # added column coding gender to "Male" and "Female" instead of "0"/"1"
+  mutate(gender=factor(gender,levels=c(0,1),labels=c("Male", "Female"))) %>% 
+
   # Reordering columns and selecting which to keep
   select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
   
