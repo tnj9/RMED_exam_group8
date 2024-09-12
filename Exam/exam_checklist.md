@@ -3,21 +3,20 @@ _(when you're done with one task, edit this file and substitute `[ ]` for `[x]`
 where needed)_
 
 - [X] Create GitHub repo and Rprojects
-- [ ] Tidy the data
+- [X] Tidy the data
   - [X] Each row is one observation, each column is one variable
   - [X] Names of columns do not have punctuation signs
   - [X] Names of columns do not start with numbers
   - [X] Names of columns are meaningful
 - [X] Explore data
 - [X] Save tidied data in a file
-- [ ] Update README
+- [X] Update README
 - [ ] Create updated codebook for tidy data
 - [ ] Style the script(s) using [{styler}](https://styler.r-lib.org/)
 
-- [ ] Manipulate/wrangle data
-  - [X] Some columns were deleted
+- [X] were deleted
   - [X] Some columns were added
-- [ ] Save manipulated data in a file
+- [X] Save manipulated data in a file
 - [ ] Update README
 - [ ] Create updated codebook for tidy data
 - [ ] Style the script(s) using [{styler}](https://styler.r-lib.org/)
