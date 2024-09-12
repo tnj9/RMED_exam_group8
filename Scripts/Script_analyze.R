@@ -71,3 +71,15 @@ Age_vs_gender_plot <- (boxplot_gender / histogram_gender)  +
 # Display the plot
 Age_vs_gender_plot
 
+# ---- Do BMI and age have a linear relationship? ----
+
+ggplot(data,aes(x=age,y=as.numeric(BMI))) +
+  geom_point(alpha=0.5) + 
+  geom_smooth(method="lm", color="blue",se=TRUE) + 
+  labs(title="BMI and age relationship",
+       x=" Age of Patients",
+       y= "BMI") + 
+  theme_classic()
+
+# it appears to be a linear relationship between BMI and age. 
+
