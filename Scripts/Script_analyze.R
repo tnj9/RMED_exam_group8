@@ -1,7 +1,5 @@
 #   T Are there any correlated measurements?
 
-
-
 #Load libraries
 library(here)
 library(tidyverse)
@@ -56,7 +54,12 @@ Age_vs_treat_plot <- (boxplot_treat / histogram_treat) +
     title = "Age vs. Treatment",
     theme = theme(plot.title = element_text(hjust = 0.5, face = "bold"))
   )
+
+# Display the plot
 Age_vs_treat_plot
+
+# Conclusion the distribution of age does not appear to depend on treatment.
+
 
 #----- Does the age distribution of the patients depend on their sex (`gender`)?--------
 
@@ -87,6 +90,9 @@ Age_vs_gender_plot <- (boxplot_gender / histogram_gender)  +
 
 # Display the plot
 Age_vs_gender_plot
+
+# Conclusion: The distribution of age does not appear to depend on gender.
+
 
 # ---- Do BMI and age have a linear relationship? ----
 
@@ -124,8 +130,12 @@ summary(logistic_model)
 # ---- Does the treatment depend on the gender of the patient? ----
 
 
-# ---- Does the treatment depend on whether the patient had a preoperative pain? ----
 
+
+
+
+
+# ---- Does the treatment depend on whether the patient had a preoperative pain? ----
 
 
 
