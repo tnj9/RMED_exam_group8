@@ -1,0 +1,58 @@
+---
+title: "Report"
+author: "Tuva Norderud Jensen, Eirik Røys, Kathrine Brun"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Original data
+
+The data comes from a randomized trial, [here are the details](DATA/codebook.html)
+
+## Reading data and joining datasets
+
+```{r, include=FALSE}
+data <- read_delim(here("DATA", "exam_dataset.txt"))
+
+joindata <- read_delim(here("DATA", "exam_joindata.txt"))
+```
+
+```{r}
+data
+
+joindata
+```
+
+
+
+## Tydying the data
+
+To tidy the data we had to: - remove duplicated rows - rename columns that... - etc.
+
+```{r}
+
+```
+
+## Wrangling
+
+...
+
+## Plots
+
+...
+
+## Statistical analysis
+
+...
+
+at the end add packages etc. with sessionInfo()
+
+```{r}
+sessionInfo()
+```
+
