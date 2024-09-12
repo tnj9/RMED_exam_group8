@@ -107,6 +107,10 @@ Regresssion_plot <- ggplot(data,aes(x=age,y=as.numeric(BMI))) +
        y= "BMI") + 
   theme_classic()
 
+
+# Display the plot
+Regresssion_plot
+
 # Conclusion: it appears to be a linear relationship between BMI and age. 
 
 # Save plot in folder Figures
