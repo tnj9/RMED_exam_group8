@@ -155,65 +155,57 @@ sum(data$preOp_pain != 1)
 ###   Statistical analysis  ####
 ################################
 
-# ---- Does the treatment depend on the preoperative smoking? ----
+# In the statistical analyis we are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
 
-# We are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
-
-# Question: Does the treatment depend on the preoperative smoking?
+# ---- Q1: Does the treatment depend on the preoperative smoking? --------------------------------------------------------------
 logistic_model <- glm(data$treat ~ data$smoking, family = binomial())
 summary(logistic_model)
-# Conclusion: # The likelihood of receiving licorice treatment do not depend on Preoperative smoking status.
-# P > 0.05
+# Conclusion: # The likelihood of receiving licorice treatment do not depend on Preoperative smoking status (P > 0.05).
 
-
-# ---- Does the treatment depend on the gender of the patient? ----
-
-# We are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
-
-# Question: Does the treatment depend on the gender?
+# ---- Q2: Does the treatment depend on the gender of the patient? -------------------------------------------------------------
 logistic_model_treatment_gender <- glm(data$treat ~ data$gender, family = binomial())
 summary(logistic_model_treatment_gender)
+# Conclusion: # The likelihood of receiving licorice treatment does not depend on gender (P > 0.05).
 
-# Conclusion: # The likelihood of receiving licorice treatment does not depend on gender.
-# P > 0.05
-
-
-# ---- Does the treatment depend on whether the patient had a preoperative pain? ----
-
-# We are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
-
-#Does the treatment depend on whether the patient had a preoperative pain?
+# ---- Q3: Does the treatment depend on whether the patient had a preoperative pain? -------------------------------------------
 logistic_model_treatment_preoppain <- glm(data$treat ~ data$preOp_pain, family = binomial())
 summary(logistic_model_treatment_preoppain)
+# Conclusion: # The likelihood of receiving licorice treatment does not depend on preoperative pain (P > 0.05).
 
-# Conclusion: # The likelihood of receiving licorice treatment does not depend on preoperative pain.
-# P > 0.05
+# ---- Q4: According to the data, was the treatment with licorice gargle reducing the risk of post operative throat pain? ------
 
-
-# ---- According to the data, was the treatment with licorice gargle reducing the risk of post operative throat pain? ----
-  
-# Throat pain 30 minutes after PACU arrival
+# Fit the logistic regression between 'treat' and four reported time intervals after surgery (30min, 90min, 4hours and morning at 1 am)
 model_pacu30min_throatPain <- glm(pacu30min_throatPain ~ treat, data = data, family = binomial)
-summary(model_pacu30min_throatPain)
-# Conclusion: Licorice treatment significantly reduces throat pain 30 minutes after surgery.
-# P < 0.05
-
-# Throat pain 90 minutes after PACU arrival
 model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
-summary(model_pacu90min_throatPain)
-# Conclusion: Licorice treatment significantly reduces throat pain 90 minutes after surgery.
-# P < 0.05
-
-# Throat pain 4 hours after surgery
 model_postOp4hour_throatPain <- glm(postOp4hour_throatPain ~ treat, data = data, family = binomial)
-summary(model_postOp4hour_throatPain)
-# Conclusion: Licorice treatment significantly reduces throat pain 4 hours after surgery.
-# P < 0.05
-
-# Throat pain on the first postoperative morning
 model_pod1am_throatPain <- glm(pod1am_throatPain ~ treat, data = data, family = binomial)
+
+# The summary from all four model show that licorice treatment significantly reduces throat pain after surgery (P < 0.05)
+summary(model_pacu30min_throatPain)
+summary(model_pacu90min_throatPain)
+summary(model_postOp4hour_throatPain)
 summary(model_pod1am_throatPain)
-# Conclusion: Licorice treatment significantly reduces throat pain on the first postoperative morning.
-# P < 0.05
+
+# To estimate the effect size we can also calculate the odds ratio from the logistic regression models (from the log-ratio)
+odds_ratio_pacu30min <- (exp(coef(model_pacu30min_throatPain)["treat1"])-1) * 100
+odds_ratio_pacu90min <- (exp(coef(model_pacu90min_throatPain)["treat1"])-1) * 100
+odds_ratio_postOp4hours <- (exp(coef(model_postOp4hour_throatPain)["treat1"])-1) * 100
+odds_ratio_pod1am <- (exp(coef(model_pod1am_throatPain)["treat1"])-1) * 100
+
+odds_ratio_pacu30min
+odds_ratio_pacu90min
+odds_ratio_postOp4hours
+odds_ratio_pod1am
+
+# Clonclusion: From the odds ratios we see that licorice treatment reduces the risk of throat pain by
+# 65.4% after 30 minutes,
+# 80.6% after 90 minutes,
+# 70.3% after 4 hours and 
+# 66.8% on the first postoperative morning
+
+
+
+
+ 
 
 
