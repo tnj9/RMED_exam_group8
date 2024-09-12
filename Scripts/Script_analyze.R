@@ -10,7 +10,7 @@ library(patchwork)
 
 data <- read.csv2(here("DATA", "clean_data.csv"))
 
-# change variable types
+# Specify correct variable types
 data <- data %>%
   mutate(ASA_score = as.factor(ASA_score),
          Mallampati_score = as.factor(Mallampati_score),
@@ -103,17 +103,10 @@ ggplot(data,aes(x=age,y=as.numeric(BMI))) +
 
 # ---- Does the treatment depend on the preoperative smoking? ----
 
-#I choose linear regression analysis to decide if there is a dependent relationship between treatment and smoking status
+# We are using logistic regression because 'treat' is categorical (0 = Sugar, 1 = Licorice).
 
-#changing variables to factors
-smoking<- as_factor(data$smoking)
-treat<- as_factor(data$treat)
-
-#performing the logistic model
+# Question: Does the treatment depend on the preoperative smoking?
 logistic_model <- glm(treat ~ smoking, family = binomial())
-
-# Check the summary of the model
 summary(logistic_model)
-
-#Conclusion: P- values indicates no dependent relationship
-
+# Conclusion: There is no significant association between preoperative smoking status and receiving licorice treatment.
+# P > 0.05
