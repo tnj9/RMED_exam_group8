@@ -10,6 +10,24 @@ library(patchwork)
 
 data <- read.csv2(here("DATA", "clean_data.csv"))
 
+# change variable types
+data <- data %>%
+  mutate(ASA_score = as.factor(ASA_score),
+         Mallampati_score = as.factor(Mallampati_score),
+         smoking = as.factor(smoking),
+         preOp_pain = as.factor(preOp_pain),
+         treat = as.factor(treat),
+         pacu30min_throatPain = as.factor(pacu30min_throatPain),
+         pacu90min_throatPain = as.factor(pacu90min_throatPain),
+         postOp4hour_throatPain = as.factor(postOp4hour_throatPain),
+         pod1am_throatPain = as.factor(pod1am_throatPain),
+         pacu30min_cough = as.factor(pacu30min_cough),
+         pacu90min_cough = as.factor(pacu90min_cough),
+         postOp4hour_cough = as.factor(postOp4hour_cough),
+         pod1am_cough = as.factor(pod1am_cough),
+         extubation_cough = as.factor(extubation_cough))
+
+
 #----- Does the age distribution depend on `treat`? --------------------------------------
 
 # Set 'treat' as factor
