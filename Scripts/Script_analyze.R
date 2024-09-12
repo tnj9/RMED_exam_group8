@@ -107,13 +107,56 @@ ggplot(data,aes(x=age,y=as.numeric(BMI))) +
 # Only two patients had preoperative pain - insufficient data to check for a relationship.
 
 
+###############################
+###   Statistical analysis ####
+###############################
 
 # ---- Does the treatment depend on the preoperative smoking? ----
 
-# We are using logistic regression because 'treat' is categorical (0 = Sugar, 1 = Licorice).
+# We are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
 
 # Question: Does the treatment depend on the preoperative smoking?
 logistic_model <- glm(treat ~ smoking, family = binomial())
 summary(logistic_model)
-# Conclusion: There is no significant association between preoperative smoking status and receiving licorice treatment.
+# Conclusion: # The likelihood of receiving licorice treatment do not depend on Preoperative smoking status.
 # P > 0.05
+
+
+# ---- Does the treatment depend on the gender of the patient? ----
+
+
+# ---- Does the treatment depend on whether the patient had a preoperative pain? ----
+
+
+
+
+
+
+
+# ---- According to the data, was the treatment with licorice gargle reducing the risk of post operative throat pain? ----
+  
+# Coughing 30 minutes after PACU arrival
+model_pacu30min_throatPain <- glm(pacu30min_throatPain ~ treat, data = data, family = binomial)
+summary(model_pacu30min_throatPain)
+# Conclusion: Licorice treatment significantly reduces throat pain 30 minutes after surgery.
+# P < 0.05
+
+# Coughing 90 minutes after PACU arrival
+model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
+summary(model_pacu90min_throatPain)
+# Conclusion: Licorice treatment significantly reduces throat pain 90 minutes after surgery.
+# P < 0.05
+
+# Coughing 4 hours after surgery
+model_postOp4hour_throatPain <- glm(postOp4hour_throatPain ~ treat, data = data, family = binomial)
+summary(model_postOp4hour_throatPain)
+# Conclusion: Licorice treatment significantly reduces throat pain 4 hours after surgery.
+# P < 0.05
+
+# Coughing on the first postoperative morning
+model_pod1am_throatPain <- glm(pod1am_throatPain ~ treat, data = data, family = binomial)
+summary(model_pod1am_throatPain)
+# Conclusion: Licorice treatment significantly reduces throat pain on the first postoperative morning.
+# P < 0.05
+
+
