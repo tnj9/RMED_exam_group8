@@ -1,0 +1,40 @@
+---
+Title: README file
+Authors: Kathrine Brun, Tuva Norderud Jensen, Eirik Røys
+
+
+Overview of the project:
+The project is based on data from a study of 236 patients undergoing elective thoracic surgery requiring a double- lumen endotracheal tube. The study investigates whether gargling with licorice before anesthesia could prevent sore throats and postextubation coughing in patients intubated with double- lumen tubes. The data contained 17 variables and 3 additional variables that were finally joined together. Gender, age, MI, physical status, Mallampati score, smoking status, preoperative pain, surgery size, intervention and three outcomes (cough, sore throat and pain swollowing) at various time points are provided. 
+
+The purpose of our exam project is to process, tidy and adjust the original transformed dataset, followed by data analysis and vizualisation. 
+
+
+Installation:
+You need the following tools and libraries to run the analysis: 
+- R: Version 4.4.1.
+- RStudio
+- R libraries:tidyverse, tidyr, here, lubridate, dplyr, skimr, ggplot2 and patchwork.
+
+How to install the packages:
+
+Setting up the project:
+(link from github)
+
+install.packages(c("tidyverse", "tidyr","here", "lubridate", "dplyr","skimr", "ggplot2", "patchwork"))
+
+Data description:
+-data/:contains the original dataset, additional dataset, codebook and cleaned data. 
+-scripts/:contains one script for tidying data and one script for analyzing the tidied data.
+- figures/: contains one plot 
+
+
+
+
+License
+The project is licensed under the MIT license. 
+
+
+
+
+
+
