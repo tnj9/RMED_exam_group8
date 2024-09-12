@@ -208,3 +208,4 @@ odds_ratio_pod1am
 # 80.6% after 90 minutes,
 # 70.3% after 4 hours and
 # 66.8% on the first postoperative morning
+# Relative to those who did not receive the licorice treatment (but got sugar instead)
