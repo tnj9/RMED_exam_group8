@@ -112,7 +112,7 @@ ggplot(data,aes(x=age,y=as.numeric(BMI))) +
 sum(data$preOp_pain == 1)
 sum(data$preOp_pain != 1)
 
-# Conclusion: Only two patients (out of 249) had preoperative pain while
+# Conclusion: Only two patients (out of 249) had preoperative pain -
 # there is insufficient data to test for a relationship.
 
 
@@ -125,7 +125,7 @@ sum(data$preOp_pain != 1)
 # We are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
 
 # Question: Does the treatment depend on the preoperative smoking?
-logistic_model <- glm(treat ~ smoking, family = binomial())
+logistic_model <- glm(data$treat ~ data$smoking, family = binomial())
 summary(logistic_model)
 # Conclusion: # The likelihood of receiving licorice treatment do not depend on Preoperative smoking status.
 # P > 0.05
