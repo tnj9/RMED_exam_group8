@@ -27,9 +27,6 @@ data <- data %>%
 
 #----- Does the age distribution depend on `treat`? --------------------------------------
 
-# Set 'treat' as factor
-data$treat <- factor(data$treat)
-
 # Boxplot Age vs. Treat 
 boxplot_treat <- ggplot(data, aes(x = treat, y = age, fill = treat)) +
   geom_boxplot() +
@@ -101,7 +98,7 @@ ggsave(here("Figures", "Age_vs_gender_plot.png"), plot = Age_vs_gender_plot)
 
 Regresssion_plot <- ggplot(data,aes(x=age,y=as.numeric(BMI))) +
   geom_point(alpha=0.8, size = 2) + 
-  geom_smooth(method="lm", color="steelblue",se=TRUE, size =1.5) + 
+  geom_smooth(method="lm", color="steelblue",se=TRUE, size =2, fill = "lightblue") + 
   labs(title="BMI and age relationship",
        x=" Age of Patients",
        y= "BMI") + 
@@ -114,7 +111,7 @@ Regresssion_plot
 # Conclusion: it appears to be a linear relationship between BMI and age. 
 
 # Save plot in folder Figures
-ggsave(here("Figures", "Regresssion_plot.png"), plot = Regresssion_plot )
+ggsave(here("Figures", "Regresssion_plot.png"), plot = Regresssion_plot)
 
 # ---- Does the preoperative pain change with age of the patients?
 
@@ -124,9 +121,9 @@ sum(data$preOp_pain != 1)
 # Conclusion: Only two patients (out of 249) had preoperative pain -
 # there is insufficient data to test for a relationship.
 
-###############################
-###   Statistical analysis ####
-###############################
+################################
+###   Statistical analysis  ####
+################################
 
 # ---- Does the treatment depend on the preoperative smoking? ----
 
@@ -151,25 +148,25 @@ summary(logistic_model)
 
 # ---- According to the data, was the treatment with licorice gargle reducing the risk of post operative throat pain? ----
   
-# Coughing 30 minutes after PACU arrival
+# Throat pain 30 minutes after PACU arrival
 model_pacu30min_throatPain <- glm(pacu30min_throatPain ~ treat, data = data, family = binomial)
 summary(model_pacu30min_throatPain)
 # Conclusion: Licorice treatment significantly reduces throat pain 30 minutes after surgery.
 # P < 0.05
 
-# Coughing 90 minutes after PACU arrival
+# Throat pain 90 minutes after PACU arrival
 model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
 summary(model_pacu90min_throatPain)
 # Conclusion: Licorice treatment significantly reduces throat pain 90 minutes after surgery.
 # P < 0.05
 
-# Coughing 4 hours after surgery
+# Throat pain 4 hours after surgery
 model_postOp4hour_throatPain <- glm(postOp4hour_throatPain ~ treat, data = data, family = binomial)
 summary(model_postOp4hour_throatPain)
 # Conclusion: Licorice treatment significantly reduces throat pain 4 hours after surgery.
 # P < 0.05
 
-# Coughing on the first postoperative morning
+# Throat pain on the first postoperative morning
 model_pod1am_throatPain <- glm(pod1am_throatPain ~ treat, data = data, family = binomial)
 summary(model_pod1am_throatPain)
 # Conclusion: Licorice treatment significantly reduces throat pain on the first postoperative morning.
