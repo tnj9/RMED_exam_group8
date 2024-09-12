@@ -58,7 +58,7 @@ Age_vs_treat_plot <- (boxplot_treat / histogram_treat) +
 # Display the plot
 Age_vs_treat_plot
 
-# Conclusion the distribution of age does not appear to depend on treatment.
+# Conclusion: the distribution of age does not appear to depend on treatment.
 
 
 #----- Does the age distribution of the patients depend on their sex (`gender`)?--------
@@ -97,19 +97,23 @@ Age_vs_gender_plot
 # ---- Do BMI and age have a linear relationship? ----
 
 ggplot(data,aes(x=age,y=as.numeric(BMI))) +
-  geom_point(alpha=0.5) + 
-  geom_smooth(method="lm", color="blue",se=TRUE) + 
+  geom_point(alpha=0.8, size = 2) + 
+  geom_smooth(method="lm", color="steelblue",se=TRUE, size =1.5) + 
   labs(title="BMI and age relationship",
        x=" Age of Patients",
        y= "BMI") + 
   theme_classic()
 
-# it appears to be a linear relationship between BMI and age. 
+# Conclusion: it appears to be a linear relationship between BMI and age. 
 
 
 # ---- Does the preoperative pain change with age of the patients?
 
-# Only two patients had preoperative pain - insufficient data to check for a relationship.
+sum(data$preOp_pain == 1)
+sum(data$preOp_pain != 1)
+
+# Conclusion: Only two out patients (out of 249) had preoperative pain while
+# there is insufficient data to test for a relationship.
 
 
 ###############################
@@ -132,12 +136,7 @@ summary(logistic_model)
 
 
 
-
-
-
 # ---- Does the treatment depend on whether the patient had a preoperative pain? ----
-
-
 
 
 
