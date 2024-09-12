@@ -83,3 +83,19 @@ ggplot(data,aes(x=age,y=as.numeric(BMI))) +
 
 # it appears to be a linear relationship between BMI and age. 
 
+# ---- Does the treatment depend on the preoperative smoking? ----
+
+#I choose linear regression analysis to decide if there is a dependent relationship between treatment and smoking status
+
+#changing variables to factors
+smoking<- as_factor(data$smoking)
+treat<- as_factor(data$treat)
+
+#performing the logistic model
+logistic_model <- glm(treat ~ smoking, family = binomial())
+
+# Check the summary of the model
+summary(logistic_model)
+
+#Conclusion: P- values indicates no dependent relationship
+
