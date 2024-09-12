@@ -9,12 +9,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r library, include=FALSE}
+library(tidyr)
+library(here)
+library(tidyverse)
+
+```
 
 ## Original data
 
 The data comes from a randomized trial, [here are the details](DATA/codebook.html)
 
-## Reading data and joining datasets
+## Reading data
 
 ```{r, include=FALSE}
 data <- read_delim(here("DATA", "exam_dataset.txt"))
@@ -28,11 +34,24 @@ data
 joindata
 ```
 
+### Joining datasets
 
+```{r}
+combined_data <- data %>%
+  full_join(joindata, join_by("patient_id"), relationship = "many-to-many")
+```
 
-## Tydying the data
+```{r}
+combined_data
+```
 
-To tidy the data we had to: - remove duplicated rows - rename columns that... - etc.
+## Tidying the data
+
+To tidy the data we had to:
+
+- remove duplicated rows
+- rename columns that...
+- etc.
 
 ```{r}
 
@@ -55,4 +74,3 @@ at the end add packages etc. with sessionInfo()
 ```{r}
 sessionInfo()
 ```
-
