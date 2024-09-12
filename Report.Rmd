@@ -1,0 +1,159 @@
+---
+title: "Report"
+author: "Tuva Norderud Jensen, Eirik Røys, Kathrine Brun"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library, include=FALSE}
+library(tidyr)
+library(here)
+library(tidyverse)
+
+```
+
+## Original data
+
+The data comes from a randomized trial, [here are the details](DATA/codebook.html)
+
+## Reading data
+
+```{r, include=FALSE}
+data <- read_delim(here("DATA", "exam_dataset.txt"))
+
+joindata <- read_delim(here("DATA", "exam_joindata.txt"))
+```
+
+```{r}
+data
+
+joindata
+```
+
+### Joining datasets
+
+```{r}
+combined_data <- data %>%
+  full_join(joindata, join_by("patient_id"), relationship = "many-to-many")
+
+combined_data
+```
+
+## Making Tidy Data
+
+To tidy the data we had to:
+
+-   Identify rows with any NA values
+    -   We excluded the two patients that had NA values since they were missing all postOp values.
+-   Change variable types
+-   Rearrange the dataset
+    -   Rename columns
+    -   Combine month and year into one column
+    -   Split preOp_ASA_Mallampati into two columns
+    -   Add postop_cough_change_extubation, postop_throatpain_change and BMI_quartile column
+    -   Change column coding gender to "Male" and "Female" instead of "0"/"1"
+-   Remove duplicated columns and rows
+-   Rearranged the dataset
+
+#### Dealing with missing values
+
+```{r identifying rows with NA}
+na_rows <- combined_data %>%
+  filter(if_any(everything(), is.na))
+
+print(na_rows)
+```
+
+```{r Removing NA}
+combined_data <- combined_data %>%
+  drop_na()
+
+```
+
+#### Changing variable types
+
+```{r changing variable types, echo=FALSE}
+combined_data <- combined_data %>%
+  mutate(preOp_ASA_Mallampati = as.factor(preOp_ASA_Mallampati),
+         preOp_smoking = as.factor(preOp_smoking),
+         preOp_pain = as.factor(preOp_pain),
+         treat = as.factor(treat),
+         pacu30min_cough = as.factor(pacu30min_cough),
+         pacu90min_cough = as.factor(pacu90min_cough),
+         postOp4hour_cough = as.factor(postOp4hour_cough),
+         pod1am_cough = as.factor(pod1am_cough),
+         extubation_cough = as.factor(extubation_cough))
+
+str(combined_data)
+```
+
+#### Rearranging dataset
+
+```{r rearranging dataset, echo=FALSE}
+combined_data <- combined_data %>%
+  # Renaming columns
+  rename(gender = "1gender") %>%
+  rename(BMI = `BMI kg/m2`) %>%
+  rename(age = preOp_age) %>%
+  rename(smoking = preOp_smoking) %>%
+  # Combine month and year into a single column 'date' and convert to day-month-year format
+  mutate(date = paste("01", month, year, sep = "-")) %>%
+  mutate(date = dmy(date)) %>%
+  # Split column 'preOp_ASA_Mallampati' into 'ASA_score' and 'Mallampati score'
+  separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_") %>%
+  # Sort rows based on patient IDs
+  arrange(patient_id) %>%
+  #adding new coloumns to the dataset
+  mutate(
+    postop_cough_change_extubation = as.numeric(extubation_cough) - as.numeric(pod1am_cough),  
+    postop_throatpain_change = as.numeric(pacu30min_throatPain) - as.numeric(pod1am_throatPain)) %>% 
+  #cut BMI into quartiles (4 equal parts)
+  mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
+                          include.lowest = TRUE, 
+                          labels = c("Q1", "Q2", "Q3", "Q4"))) %>% 
+  
+  # added column coding gender to "Male" and "Female" instead of "0"/"1"
+  mutate(gender=factor(gender,levels=c(0,1),labels=c("Male", "Female"))) %>% 
+  
+  # Reordering columns and selecting which to keep
+  select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
+```
+
+#### Removing duplicates
+
+```{r Removing duplicate column}
+unique(combined_data$preOp_gender == combined_data$gender)
+
+combined_data$preOp_gender <- NULL
+```
+
+```{r Removing duplicate rows}
+combined_data <- combined_data %>%
+  group_by_all() %>%
+  filter(n() == 1) %>%
+  ungroup()
+
+combined_data <- combined_data %>%
+  distinct(.keep_all = TRUE)
+
+combined_data %>%
+  filter(patient_id==48)
+```
+
+## Plots
+
+...
+
+## Statistical analysis
+
+...
+
+at the end add packages etc. with sessionInfo()
+
+```{r}
+sessionInfo()
+```
