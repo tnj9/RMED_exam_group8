@@ -1,6 +1,6 @@
 #   T Are there any correlated measurements?
-#   K Does the preoperative pain change with age of the patients?
-#   T Do BMI and age have a linear relationship?
+
+
 
 #Load libraries
 library(here)
@@ -100,6 +100,13 @@ ggplot(data,aes(x=age,y=as.numeric(BMI))) +
   theme_classic()
 
 # it appears to be a linear relationship between BMI and age. 
+
+
+# ---- Does the preoperative pain change with age of the patients?
+
+# Only two patients had preoperative pain - insufficient data to check for a relationship.
+
+
 
 # ---- Does the treatment depend on the preoperative smoking? ----
 
