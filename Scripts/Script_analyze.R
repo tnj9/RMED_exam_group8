@@ -173,7 +173,7 @@ summary(logistic_model)
 
 # ---- Does the treatment depend on whether the patient had a preoperative pain? ----
 
-
+ 
 
 
 # ---- According to the data, was the treatment with licorice gargle reducing the risk of post operative throat pain? ----
