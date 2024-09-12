@@ -2,21 +2,21 @@ Checklist for the final project:
 _(when you're done with one task, edit this file and substitute `[ ]` for `[x]`
 where needed)_
 
-- [ ] Create GitHub repo and Rprojects
+- [X] Create GitHub repo and Rprojects
 - [ ] Tidy the data
-  - [ ] Each row is one observation, each column is one variable
-  - [ ] Names of columns do not have punctuation signs
-  - [ ] Names of columns do not start with numbers
-  - [ ] Names of columns are meaningful
-- [ ] Explore data
-- [ ] Save tidied data in a file
+  - [X] Each row is one observation, each column is one variable
+  - [X] Names of columns do not have punctuation signs
+  - [X] Names of columns do not start with numbers
+  - [X] Names of columns are meaningful
+- [X] Explore data
+- [X] Save tidied data in a file
 - [ ] Update README
 - [ ] Create updated codebook for tidy data
 - [ ] Style the script(s) using [{styler}](https://styler.r-lib.org/)
 
 - [ ] Manipulate/wrangle data
-  - [ ] Some columns were deleted
-  - [ ] Some columns were added
+  - [X] Some columns were deleted
+  - [X] Some columns were added
 - [ ] Save manipulated data in a file
 - [ ] Update README
 - [ ] Create updated codebook for tidy data
