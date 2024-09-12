@@ -112,7 +112,7 @@ ggplot(data,aes(x=age,y=as.numeric(BMI))) +
 sum(data$preOp_pain == 1)
 sum(data$preOp_pain != 1)
 
-# Conclusion: Only two out patients (out of 249) had preoperative pain while
+# Conclusion: Only two patients (out of 249) had preoperative pain while
 # there is insufficient data to test for a relationship.
 
 
