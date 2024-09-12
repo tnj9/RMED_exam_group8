@@ -168,12 +168,26 @@ summary(logistic_model)
 
 # ---- Does the treatment depend on the gender of the patient? ----
 
+# We are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
 
+# Question: Does the treatment depend on the gender?
+logistic_model_treatment_gender <- glm(data$treat ~ data$gender, family = binomial())
+summary(logistic_model_treatment_gender)
+
+# Conclusion: # The likelihood of receiving licorice treatment does not depend on gender.
+# P > 0.05
 
 
 # ---- Does the treatment depend on whether the patient had a preoperative pain? ----
 
- 
+# We are using logistic regression (GLM) because 'treat' is categorical (0 = Sugar, 1 = Licorice).
+
+#Does the treatment depend on whether the patient had a preoperative pain?
+logistic_model_treatment_preoppain <- glm(data$treat ~ data$preOp_pain, family = binomial())
+summary(logistic_model_treatment_preoppain)
+
+# Conclusion: # The likelihood of receiving licorice treatment does not depend on preoperative pain.
+# P > 0.05
 
 
 # ---- According to the data, was the treatment with licorice gargle reducing the risk of post operative throat pain? ----
