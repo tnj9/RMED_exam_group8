@@ -14,7 +14,7 @@ data <- read.csv2(here("DATA", "clean_data.csv"))
 
 # Making correlation matrix
 corr <- data %>% 
-  select(-gender, -date, -BMI_quartile, patient_id) %>% # Removing values that are not numeric and patient_id
+  select(-gender, -date, -BMI_quartile, -patient_id) %>% # Removing values that are not numeric and patient_id
   cor()
 
 print(corr)
@@ -40,7 +40,7 @@ corr_plot
 
 
 # Save plot
-ggsave(here("Figures", "corr_plot.png"), plot = corr_plot)
+ggsave(here("Figures", "corr_plot.png"), plot = corr_plot, width = 15, height = 10)
 
 
 
