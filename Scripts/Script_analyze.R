@@ -1,5 +1,4 @@
-
-#Load libraries
+# Load libraries
 library(here)
 library(tidyverse)
 library(ggplot2)
@@ -8,7 +7,6 @@ library(ggcorrplot)
 library(dplyr)
 
 data <- read.csv2(here("DATA", "clean_data.csv"))
-
 
 #----- Are there any correlated measurements? --------------------------------------
 
@@ -19,14 +17,12 @@ corr <- data %>%
 
 print(corr)
 
-
 # Making matrix of correlation p-values
 p.mat <- data %>% 
   select(-gender, -date, -BMI_quartile, -patient_id) %>% # Removing values that are not numeric and patient_id
   cor_pmat()
 
 print(p.mat)
-
 
 # Making plot
 corr_plot <- ggcorrplot(corr, 
@@ -38,12 +34,10 @@ corr_plot <- ggcorrplot(corr,
 
 corr_plot
 
+# Conclusion: several measurements are correlated: e.g., pacu30min_swallowPain and pacu30min_throatpain
 
 # Save plot
 ggsave(here("Figures", "corr_plot.png"), plot = corr_plot, width = 15, height = 10)
-
-
-
 
 # Ensure correct variable types
 data <- data %>%
@@ -61,8 +55,6 @@ data <- data %>%
          postOp4hour_cough = as.factor(postOp4hour_cough),
          pod1am_cough = as.factor(pod1am_cough),
          extubation_cough = as.factor(extubation_cough))
-
-
 
 #----- Does the age distribution depend on `treat`? --------------------------------------
 
@@ -142,7 +134,6 @@ Regresssion_plot <- ggplot(data,aes(x=age,y=as.numeric(BMI))) +
        x=" Age of Patients",
        y= "BMI") + 
   theme_classic()
-
 
 # Display the plot
 Regresssion_plot
