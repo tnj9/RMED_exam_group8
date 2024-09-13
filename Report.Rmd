@@ -149,7 +149,6 @@ combined_data %>%
   filter(patient_id==48)
 ```
 
-=======
 #### Tidy data
 
 ```{r Create tidy data file, echo=FALSE}
