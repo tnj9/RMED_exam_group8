@@ -406,41 +406,41 @@ The likelihood of receiving licorice treatment does not depend on preoperative p
 
 #### Was the treatment with licorice gargle reducing the risk of post operative throat pain?
 
-```{r risk of postop pain}
-# Fit the logistic regression between 'treat' and throat pain reported at four time intervals after surgery (30min, 90min, 4hours and 1am)
+-   We performed a logistic regression between "treat" and "throat pain" reported at four time intervals after surgery (30min, 90min,4hours and 1am)
+
+```{r risk of postoperative pain ~ 30 minutes, eval=FALSE}
 model_pacu30min_throatPain <- glm(pacu30min_throatPain ~ treat, data = data, family = binomial)
-model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
-model_postOp4hour_throatPain <- glm(postOp4hour_throatPain ~ treat, data = data, family = binomial)
-model_pod1am_throatPain <- glm(pod1am_throatPain ~ treat, data = data, family = binomial)
-
-# The summary from all four model show that licorice treatment significantly reduces throat pain after surgery at all time points (P < 0.05)
 summary(model_pacu30min_throatPain)
-summary(model_pacu90min_throatPain)
-summary(model_postOp4hour_throatPain)
-summary(model_pod1am_throatPain)
-
-# To estimate the effect size we can also calculate the odds ratio from the logistic regression models (from the log-odds)
 odds_ratio_pacu30min <- (exp(coef(model_pacu30min_throatPain)["treat1"]) - 1) * 100
-odds_ratio_pacu90min <- (exp(coef(model_pacu90min_throatPain)["treat1"]) - 1) * 100
-odds_ratio_postOp4hours <- (exp(coef(model_postOp4hour_throatPain)["treat1"]) - 1) * 100
-odds_ratio_pod1am <- (exp(coef(model_pod1am_throatPain)["treat1"]) - 1) * 100
-
-# Print the odds
 odds_ratio_pacu30min
+```
+P<0.05, odds ratio shows 65.4% risk reduction of having throat pain when treated with licorice gargling before intubation
+
+```{r risk of poeroperative pain ~90 minutes, eval=FALSE}
+model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
+summary(model_pacu90min_throatPain)
+odds_ratio_pacu90min <- (exp(coef(model_pacu90min_throatPain)["treat1"]) - 1) * 100
 odds_ratio_pacu90min
+```
+P<0.05, odds ratio shows 80.6% risk reduction of having throat pain when treated with licorice gargling before intubation
+
+```{r risk of postoperative pain ~ 4 hours, eval=FALSE}
+model_postOp4hour_throatPain <- glm(postOp4hour_throatPain ~ treat, data = data, family = binomial)
+summary(model_postOp4hour_throatPain)
+odds_ratio_postOp4hours <- (exp(coef(model_postOp4hour_throatPain)["treat1"]) - 1) * 100
 odds_ratio_postOp4hours
+```
+P<0.05, odds ratio shows 70.3% risk reduction of having throat pain when treated with licorice gargling before intubation
+
+```{r risk of postop pain ~pod1am, eval=FALSE}
+model_pod1am_throatPain <- glm(pod1am_throatPain ~ treat, data = data, family = binomial)
+summary(model_pod1am_throatPain)
+odds_ratio_pod1am <- (exp(coef(model_pod1am_throatPain)["treat1"]) - 1) * 100
 odds_ratio_pod1am
 ```
+P<0.05, odds ratio shows 66.8% risk reduction of having throat pain when treated with licorice gargling before intubation
 
-From the odds ratios we see that licorice treatment reduces the risk of throat pain relative to those who did not receive the licorice treatment (but got sugar instead) by:
 
--   65.4% after 30 minutes
-
--   80.6% after 90 minutes,
-
--   70.3% after 4 hours
-
--   66.8% on the first postoperative morning
 
 ## Session info
 
