@@ -4,7 +4,7 @@ Authors: Kathrine Brun, Tuva Norderud Jensen, Eirik Røys
 
 
 Overview of the project:
-The project is based on data from a study of 236 patients undergoing elective thoracic surgery requiring a double- lumen endotracheal tube. The study investigates whether gargling with licorice before anesthesia could prevent sore throats and postextubation coughing in patients intubated with double- lumen tubes. The data contained 17 variables and 3 additional variables that were finally joined together. Gender, age, MI, physical status, Mallampati score, smoking status, preoperative pain, surgery size, intervention and three outcomes (cough, sore throat and pain swollowing) at various time points are provided. 
+The project is based on data from a study of 236 patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. The study investigates whether gargling with licorice before anesthesia could prevent sore throats and postextubation coughing in patients intubated with double-lumen tubes. The data contained 17 variables and 3 additional variables that were finally joined together. Gender, age, MI, physical status, Mallampati score, smoking status, preoperative pain, surgery size, intervention and three outcomes (cough, sore throat and pain swollowing) at various time points are provided. 
 
 The purpose of our exam project is to process, tidy and adjust the original transformed dataset, followed by data analysis and vizualisation. 
 
