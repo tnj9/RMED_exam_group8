@@ -14,7 +14,7 @@ where needed)_
 - [X] Create updated codebook for tidy data
 - [X] Style the script(s) using [{styler}](https://styler.r-lib.org/)
 
-- [X] were deleted
+- [X] Some columns were deleted
   - [X] Some columns were added
 - [X] Save manipulated data in a file
 - [X] Update README
@@ -29,7 +29,7 @@ where needed)_
 - [X] Style the script(s) using [{styler}](https://styler.r-lib.org/)
 - [X] Update README if more files were created
 
-- [ ] Create Rmd report
-- [ ] Check .html output and adjust Rmd to look nice; repeat if needed
+- [X] Create Rmd report
+- [X] Check .html output and adjust Rmd to look nice; repeat if needed
 
-- [ ] Check repository if all needed files are present, clean up
+- [X] Check repository if all needed files are present, clean up
