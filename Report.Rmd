@@ -24,7 +24,7 @@ library(styler)
 
 The original data was taken from the [medicaldata webpage](https://higgi13425.github.io/medicaldata/reference/licorice_gargle.html) and transformed into a not tidy format before it was given to us to use as part of the RMED901 exam in fall 2024.
 
-The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the origional data. For more information on the data see [codebook](DATA/codebook.html).
+The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the original data. For more information on the data see [codebook](DATA/codebook.html).
 
 ## Reading data
 
@@ -198,7 +198,7 @@ data <- read.csv2(here("DATA", "clean_data.csv"))
 
 ## Statistical analysis
 
-#### Does the treatment depend on the preoperative smoking? 
+#### Does the treatment depend on the preoperative smoking?
 
 ```{r treat smoking}
 logistic_model <- glm(data$treat ~ data$smoking, family = binomial())
@@ -207,7 +207,7 @@ summary(logistic_model)
 
 The likelihood of receiving licorice treatment do not depend on Preoperative smoking status (P \> 0.05).
 
-#### Does the treatment depend on the gender of the patient? 
+#### Does the treatment depend on the gender of the patient?
 
 ```{r treat gender}
 logistic_model_treatment_gender <- glm(data$treat ~ data$gender, family = binomial())
@@ -216,7 +216,7 @@ summary(logistic_model_treatment_gender)
 
 The likelihood of receiving licorice treatment does not depend on gender (P \> 0.05).
 
-#### Does the treatment depend on whether the patient had a preoperative pain? 
+#### Does the treatment depend on whether the patient had a preoperative pain?
 
 ```{r treat preop pain}
 logistic_model_treatment_preoppain <- glm(data$treat ~ data$preOp_pain, family = binomial())
