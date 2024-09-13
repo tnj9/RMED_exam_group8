@@ -146,6 +146,12 @@ combined_data %>%
   filter(patient_id==48)
 ```
 
+#### Tidy data
+
+```{r Create tidy data file, echo=FALSE}
+write_csv2(combined_data, file = here("DATA", "clean_data.csv"))
+```
+
 ## Stratifying data
 
 Data was stratified by a gender and min, max, mean and sd of age was reported.
@@ -158,10 +164,10 @@ combined_data %>%
 
 Data was also stratified by the following instructions:
 
-- BMI <25
-- Gender = female
-- Age > 50
-- extubation_cough = TRUE
+-   BMI \<25
+-   Gender = female
+-   Age \> 50
+-   extubation_cough = TRUE
 
 ```{r Stratify}
 combined_data %>% 
@@ -172,7 +178,6 @@ combined_data %>%
   summarise(min(age), max(age), mean(age), sd(age))
 ```
 
-
 Table based on gender and BMI_quartile
 
 ```{r Gender and BMI_quartile table}
@@ -180,7 +185,6 @@ combined_data %>%
   count(gender, BMI_quartile) %>%
   arrange(gender, BMI_quartile)
 ```
-  
 
 ## Plots
 
