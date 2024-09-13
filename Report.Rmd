@@ -146,6 +146,42 @@ combined_data %>%
   filter(patient_id==48)
 ```
 
+## Stratifying data
+
+Data was stratified by a gender and min, max, mean and sd of age was reported.
+
+```{r Stratify gender}
+combined_data %>% 
+  filter(gender == "Female") %>% 
+  summarise(min(age), max(age), mean(age), sd(age))
+```
+
+Data was also stratified by the following instructions:
+
+- BMI <25
+- Gender = female
+- Age > 50
+- extubation_cough = TRUE
+
+```{r Stratify}
+combined_data %>% 
+  filter(BMI < 25 ) %>% 
+  filter(gender == "Female") %>% 
+  filter(age > 50) %>% 
+  filter(extubation_cough = TRUE) %>% 
+  summarise(min(age), max(age), mean(age), sd(age))
+```
+
+
+Table based on gender and BMI_quartile
+
+```{r Gender and BMI_quartile table}
+combined_data %>%
+  count(gender, BMI_quartile) %>%
+  arrange(gender, BMI_quartile)
+```
+  
+
 ## Plots
 
 ...
