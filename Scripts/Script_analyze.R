@@ -201,7 +201,7 @@ odds_ratio_pod1am <- (exp(coef(model_pod1am_throatPain)["treat1"]) - 1) * 100
 odds_ratio_pacu30min
 odds_ratio_pacu90min
 odds_ratio_postOp4hours
-odds_ratio_pod1am
+odds_ratio_pod1am 
 
 # Conclusion: From the odds ratios we see that licorice treatment reduces the risk of throat pain by
 # 65.4% after 30 minutes,
