@@ -9,7 +9,7 @@ where needed)_
   - [X] Names of columns do not start with numbers
   - [X] Names of columns are meaningful
 - [X] Explore data
-- [X] Save tidied data in a file
+- [X] Save tidied data in a file 
 - [X] Update README
 - [X] Create updated codebook for tidy data
 - [X] Style the script(s) using [{styler}](https://styler.r-lib.org/)
