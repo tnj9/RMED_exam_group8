@@ -14,6 +14,8 @@ library(here)
 library(tidyverse)
 library(ggplot2)
 library(patchwork)
+library(lubridate)
+library(skimr)
 library(ggcorrplot)
 library(dplyr)
 library(styler)
@@ -21,9 +23,9 @@ library(styler)
 
 ## Original data
 
-The original data was taken from the [medicaldata webpage](https://higgi13425.github.io/medicaldata/reference/licorice_gargle.html) and transformed into a not tidy format before it was given to us to use as part of the RMED901 exam in fall 2024.
+The original data came from the [medicaldata webpage](https://higgi13425.github.io/medicaldata/reference/licorice_gargle.html) and transformed into a not tidy format before it was given to us to use as part of the RMED901 exam in fall 2024.
 
-The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the original data. For more information on the data see [codebook](DATA/codebook.html).
+The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. The study investigates whether gargling with licorice before anesthesia can prevent postoperative sore throat and coughing in these patients. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the original data. For more information on the data see [codebook](DATA/codebook.html).
 
 ## Reading data
 
@@ -98,6 +100,20 @@ str(combined_data)
 
 #### Rearranging dataset
 
+-   renaming columns
+
+-   combined month and year into a single column "date in month-year (my) format
+
+-   split the coloumn ASA_Mallampati into two separate variables
+
+-   sorted rows based in patient ID
+
+-   added new columns showing change in cough and throat pain
+
+-   cutting BMI into quartiles
+
+-   Reordering columns and selecting which to keep
+
 ```{r rearranging dataset, echo=FALSE}
 combined_data <- combined_data %>%
   # Renaming columns
@@ -108,7 +124,7 @@ combined_data <- combined_data %>%
   # Combine month and year into a single column 'date' and convert to day-month-year format
   mutate(date = paste("01", month, year, sep = "-")) %>%
   mutate(date = dmy(date)) %>%
-  # Split column 'preOp_ASA_Mallampati' into 'ASA_score' and 'Mallampati score'
+  # Split column 'preOp_ASA_Mallampati' into 'ASA_score' and 'Mallamdata:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABH0lEQVR4XmNgGAVDCqxdvzVhzcbNm6mBK6uqVqObDwf///9nXLt+SzG6JlJxTW3tVpBZ6OajgP3797Os3bClFV0zsbiuoXEfyAx0c7GCRTt3cq9Zv7UX3RBCuL6x8TBIL7p5eMGqVbv512zYMgvdMFy4san1FEgPujlEgbVrd0gCg3EJuqHouLm59TxILbp+ksCqjdvV12zcshLdcBhuamm7BFKDro8ssGbjRr01G7aux7Ckte0qSA5dPUVg9frNDkDLNsGDq7X9GkgMXR1VwNoNm0MgPmm/DmKjy49wwLjIbzM1MLq5GIBxgc9mhm2eFGGwGYQA42wvDI2kYrAZhADjdEyNpGKwGYQA42Q3DI2kYrAZBEGfy2aq4FEw5AAASl8F3R9fQqAAAAAASUVORK5CYII=pati score'
   separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_") %>%
   # Sort rows based on patient IDs
   arrange(patient_id) %>%
@@ -126,6 +142,8 @@ combined_data <- combined_data %>%
   
   # Reordering columns and selecting which to keep
   select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
+
+combined_data
 ```
 
 #### Removing duplicates
@@ -149,7 +167,11 @@ combined_data %>%
   filter(patient_id==48)
 ```
 
+<<<<<<< HEAD
 #### Tidy data
+=======
+======= \#### Tidy data
+>>>>>>> 699daa1b266c37750ebd54befd193ac6fa4986f7
 
 ```{r Create tidy data file, echo=FALSE}
 write_csv2(combined_data, file = here("DATA", "clean_data.csv"))
@@ -194,9 +216,11 @@ combined_data %>%
 ```{r, include=TRUE}
 data <- read.csv2(here("DATA", "clean_data.csv"))
 ```
+
 # **Analyis: Relationship between variables**
 
 ## **Are there any correlated measurements?**
+
 ```{r correlation-plot, fig.width=9, fig.height=9}
 # Create correlation matrix excluding non-numeric and irrelevant columns
 corr <- data %>%
@@ -223,8 +247,7 @@ corr_plot
 
 ```
 
-### Conclusion: several measurements are correlated: e.g., `pacu30min_swallowPain` and `pacu30min_throatpain` 
-
+### Conclusion: several measurements are correlated: e.g., `pacu30min_swallowPain` and `pacu30min_throatpain`
 
 ```{r specify variables, include=FALSE, warning= FALSE}
 data <- data %>%
@@ -246,7 +269,6 @@ data <- data %>%
   )
 
 ```
-
 
 ## **Does the `age` distribution depend on `treat`?**
 
@@ -281,8 +303,7 @@ Age_vs_treat_plot
 
 ```
 
-### Conclusion: the distribution of `age` does not appear to depend on `treatment`. 
-
+### Conclusion: the distribution of `age` does not appear to depend on `treatment`.
 
 ## **Does the `age` distribution of the patients depend on their `gender`?**
 
@@ -320,7 +341,6 @@ Age_vs_gender_plot
 
 ### Conclusion: The distribution of `age` does not appear to depend on `gender`.
 
-
 ## **Do `BMI` and `age` have a linear relationship?**
 
 ```{r Age vs. BMI, include = TRUE, warning= FALSE}
@@ -344,8 +364,8 @@ Regresssion_plot
 
 ### Conclusion: it appears to be a linear relationship between `BMI` and `age`.
 
-
 ## **Does the `preOp_pain` change with the `age` of the patients?**
+
 ```{r preOppain vs. age, include = TRUE, warning= FALSE}
 
 sum(data$preOp_pain == 1)

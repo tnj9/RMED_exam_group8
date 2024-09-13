@@ -9,25 +9,25 @@ where needed)_
   - [X] Names of columns do not start with numbers
   - [X] Names of columns are meaningful
 - [X] Explore data
-- [X] Save tidied data in a file
+- [X] Save tidied data in a file  
 - [X] Update README
-- [ ] Create updated codebook for tidy data
-- [ ] Style the script(s) using [{styler}](https://styler.r-lib.org/)
+- [X] Create updated codebook for tidy data
+- [X] Style the script(s) using [{styler}](https://styler.r-lib.org/)
 
 - [X] were deleted
   - [X] Some columns were added
 - [X] Save manipulated data in a file
-- [ ] Update README
-- [ ] Create updated codebook for tidy data
-- [ ] Style the script(s) using [{styler}](https://styler.r-lib.org/)
+- [X] Update README
+- [X] Create updated codebook for tidy data
+- [X] Style the script(s) using [{styler}](https://styler.r-lib.org/)
 
-- [ ] Create plots
-- [ ] Style the script(s) using [{styler}](https://styler.r-lib.org/)
-- [ ] Update README
+- [X] Create plots
+- [X] Style the script(s) using [{styler}](https://styler.r-lib.org/)
+- [X] Update README
 
-- [ ] Analyze data
-- [ ] Style the script(s) using [{styler}](https://styler.r-lib.org/)
-- [ ] Update README if more files were created
+- [X] Analyze data
+- [X] Style the script(s) using [{styler}](https://styler.r-lib.org/)
+- [X] Update README if more files were created
 
 - [ ] Create Rmd report
 - [ ] Check .html output and adjust Rmd to look nice; repeat if needed
