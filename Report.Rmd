@@ -1,0 +1,270 @@
+---
+title: "Report"
+author: "Tuva Norderud Jensen, Eirik Røys, Kathrine Brun"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r library, include=FALSE}
+library(tidyr)
+library(here)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(ggcorrplot)
+library(dplyr)
+library(styler)
+```
+
+## Original data
+
+The original data was taken from the [medicaldata webpage](https://higgi13425.github.io/medicaldata/reference/licorice_gargle.html) and transformed into a not tidy format before it was given to us to use as part of the RMED901 exam in fall 2024.
+
+The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the original data. For more information on the data see [codebook](DATA/codebook.html).
+
+## Reading data
+
+```{r, include=FALSE}
+data <- read_delim(here("DATA", "exam_dataset.txt"))
+
+joindata <- read_delim(here("DATA", "exam_joindata.txt"))
+```
+
+```{r}
+data
+
+joindata
+```
+
+### Joining datasets
+
+```{r}
+combined_data <- data %>%
+  full_join(joindata, join_by("patient_id"), relationship = "many-to-many")
+
+combined_data
+```
+
+## Making Tidy Data
+
+To tidy the data we had to:
+
+-   Identify rows with any NA values
+    -   We excluded the two patients that had NA values since they were missing all postOp values.
+-   Change variable types
+-   Rearrange the dataset
+    -   Rename columns
+    -   Combine month and year into one column
+    -   Split preOp_ASA_Mallampati into two columns
+    -   Add postop_cough_change_extubation, postop_throatpain_change and BMI_quartile column
+    -   Change column coding gender to "Male" and "Female" instead of "0"/"1"
+-   Remove duplicated columns and rows
+-   Rearranged the dataset
+
+#### Dealing with missing values
+
+```{r identifying rows with NA}
+na_rows <- combined_data %>%
+  filter(if_any(everything(), is.na))
+
+print(na_rows)
+```
+
+```{r Removing NA}
+combined_data <- combined_data %>%
+  drop_na()
+
+```
+
+#### Changing variable types
+
+```{r changing variable types, echo=FALSE}
+combined_data <- combined_data %>%
+  mutate(preOp_ASA_Mallampati = as.factor(preOp_ASA_Mallampati),
+         preOp_smoking = as.factor(preOp_smoking),
+         preOp_pain = as.factor(preOp_pain),
+         treat = as.factor(treat),
+         pacu30min_cough = as.factor(pacu30min_cough),
+         pacu90min_cough = as.factor(pacu90min_cough),
+         postOp4hour_cough = as.factor(postOp4hour_cough),
+         pod1am_cough = as.factor(pod1am_cough),
+         extubation_cough = as.factor(extubation_cough))
+
+str(combined_data)
+```
+
+#### Rearranging dataset
+
+```{r rearranging dataset, echo=FALSE}
+combined_data <- combined_data %>%
+  # Renaming columns
+  rename(gender = "1gender") %>%
+  rename(BMI = `BMI kg/m2`) %>%
+  rename(age = preOp_age) %>%
+  rename(smoking = preOp_smoking) %>%
+  # Combine month and year into a single column 'date' and convert to day-month-year format
+  mutate(date = paste("01", month, year, sep = "-")) %>%
+  mutate(date = dmy(date)) %>%
+  # Split column 'preOp_ASA_Mallampati' into 'ASA_score' and 'Mallampati score'
+  separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_") %>%
+  # Sort rows based on patient IDs
+  arrange(patient_id) %>%
+  #adding new coloumns to the dataset
+  mutate(
+    postop_cough_change_extubation = as.numeric(extubation_cough) - as.numeric(pod1am_cough),  
+    postop_throatpain_change = as.numeric(pacu30min_throatPain) - as.numeric(pod1am_throatPain)) %>% 
+  #cut BMI into quartiles (4 equal parts)
+  mutate(BMI_quartile=cut(BMI,breaks = quantile (BMI, probs = seq(0, 1, by = 0.25), na.rm = TRUE), 
+                          include.lowest = TRUE, 
+                          labels = c("Q1", "Q2", "Q3", "Q4"))) %>% 
+  
+  # added column coding gender to "Male" and "Female" instead of "0"/"1"
+  mutate(gender=factor(gender,levels=c(0,1),labels=c("Male", "Female"))) %>% 
+  
+  # Reordering columns and selecting which to keep
+  select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
+```
+
+#### Removing duplicates
+
+```{r Removing duplicate column}
+unique(combined_data$preOp_gender == combined_data$gender)
+
+combined_data$preOp_gender <- NULL
+```
+
+```{r Removing duplicate rows}
+combined_data <- combined_data %>%
+  group_by_all() %>%
+  filter(n() == 1) %>%
+  ungroup()
+
+combined_data <- combined_data %>%
+  distinct(.keep_all = TRUE)
+
+combined_data %>%
+  filter(patient_id==48)
+```
+
+#### Tidy data
+
+```{r Create tidy data file, echo=FALSE}
+write_csv2(combined_data, file = here("DATA", "clean_data.csv"))
+```
+
+## Stratifying data
+
+Data was stratified by a gender and min, max, mean and sd of age was reported.
+
+```{r Stratify gender}
+combined_data %>% 
+  filter(gender == "Female") %>% 
+  summarise(min(age), max(age), mean(age), sd(age))
+```
+
+Data was also stratified by the following instructions:
+
+-   BMI \<25
+-   Gender = female
+-   Age \> 50
+-   extubation_cough = TRUE
+
+```{r Stratify}
+combined_data %>% 
+  filter(BMI < 25 ) %>% 
+  filter(gender == "Female") %>% 
+  filter(age > 50) %>% 
+  filter(extubation_cough = TRUE) %>% 
+  summarise(min(age), max(age), mean(age), sd(age))
+```
+
+Table based on gender and BMI_quartile
+
+```{r Gender and BMI_quartile table}
+combined_data %>%
+  count(gender, BMI_quartile) %>%
+  arrange(gender, BMI_quartile)
+```
+
+## Plots
+
+```{r read clean data, include=FALSE}
+data <- read.csv2(here("DATA", "clean_data.csv"))
+```
+
+## Statistical analysis
+
+#### Does the treatment depend on the preoperative smoking?
+
+```{r treat smoking}
+logistic_model <- glm(data$treat ~ data$smoking, family = binomial())
+summary(logistic_model)
+```
+
+The likelihood of receiving licorice treatment do not depend on Preoperative smoking status (P \> 0.05).
+
+#### Does the treatment depend on the gender of the patient?
+
+```{r treat gender}
+logistic_model_treatment_gender <- glm(data$treat ~ data$gender, family = binomial())
+summary(logistic_model_treatment_gender)
+```
+
+The likelihood of receiving licorice treatment does not depend on gender (P \> 0.05).
+
+#### Does the treatment depend on whether the patient had a preoperative pain?
+
+```{r treat preop pain}
+logistic_model_treatment_preoppain <- glm(data$treat ~ data$preOp_pain, family = binomial())
+summary(logistic_model_treatment_preoppain)
+```
+
+The likelihood of receiving licorice treatment does not depend on preoperative pain (P \> 0.05).
+
+#### Was the treatment with licorice gargle reducing the risk of post operative throat pain?
+
+```{r risk of postop pain}
+# Fit the logistic regression between 'treat' and throat pain reported at four time intervals after surgery (30min, 90min, 4hours and 1am)
+model_pacu30min_throatPain <- glm(pacu30min_throatPain ~ treat, data = data, family = binomial)
+model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
+model_postOp4hour_throatPain <- glm(postOp4hour_throatPain ~ treat, data = data, family = binomial)
+model_pod1am_throatPain <- glm(pod1am_throatPain ~ treat, data = data, family = binomial)
+
+# The summary from all four model show that licorice treatment significantly reduces throat pain after surgery at all time points (P < 0.05)
+summary(model_pacu30min_throatPain)
+summary(model_pacu90min_throatPain)
+summary(model_postOp4hour_throatPain)
+summary(model_pod1am_throatPain)
+
+# To estimate the effect size we can also calculate the odds ratio from the logistic regression models (from the log-odds)
+odds_ratio_pacu30min <- (exp(coef(model_pacu30min_throatPain)["treat1"]) - 1) * 100
+odds_ratio_pacu90min <- (exp(coef(model_pacu90min_throatPain)["treat1"]) - 1) * 100
+odds_ratio_postOp4hours <- (exp(coef(model_postOp4hour_throatPain)["treat1"]) - 1) * 100
+odds_ratio_pod1am <- (exp(coef(model_pod1am_throatPain)["treat1"]) - 1) * 100
+
+# Print the odds
+odds_ratio_pacu30min
+odds_ratio_pacu90min
+odds_ratio_postOp4hours
+odds_ratio_pod1am
+```
+
+From the odds ratios we see that licorice treatment reduces the risk of throat pain relative to those who did not receive the licorice treatment (but got sugar instead) by:
+
+-   65.4% after 30 minutes
+
+-   80.6% after 90 minutes,
+
+-   70.3% after 4 hours
+
+-   66.8% on the first postoperative morning
+
+## Session info
+
+```{r, echo=FALSE}
+sessionInfo()
+```
