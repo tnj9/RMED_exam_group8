@@ -7,7 +7,7 @@ output: html_document
 
 ## Project Description:
 
-This respository is the final outcome of our exam project in RMED901.The project is based on a study of 236 patients undergoing elective thoracic surgery, requiring the use of a double-lumen endotracheal tube. The study investigates whether gargling with licorice before anesthesia can prevent postoperative sore throat and coughing in these patients.
+This repository is the final outcome of our exam project in RMED901.The project is based on a study of 236 patients undergoing elective thoracic surgery, requiring the use of a double-lumen endotracheal tube. The study investigates whether gargling with licorice before anesthesia can prevent postoperative sore throat and coughing in these patients.
 
 The repository contains data, scripts, results from analysis and other relevant information. 
 
