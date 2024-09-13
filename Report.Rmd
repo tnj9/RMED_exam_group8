@@ -18,7 +18,9 @@ library(tidyverse)
 
 ## Original data
 
-The data comes from a randomized trial, [here are the details](DATA/codebook.html)
+The original data was taken from the [medicaldata webpage](https://higgi13425.github.io/medicaldata/reference/licorice_gargle.html) and transformed into a not tidy format before it was given to us to use as part of the RMED901 exam in fall 2024.
+
+The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the origional data. For more information on the data see [codebook](DATA/codebook.html).
 
 ## Reading data
 
