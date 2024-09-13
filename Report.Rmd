@@ -10,11 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r library, include=FALSE}
-library(tidyr)
 library(here)
 library(tidyverse)
 library(ggplot2)
 library(patchwork)
+library(lubridate)
+library(skimr)
 library(ggcorrplot)
 library(dplyr)
 library(styler)
@@ -22,9 +23,9 @@ library(styler)
 
 ## Original data
 
-The original data was taken from the [medicaldata webpage](https://higgi13425.github.io/medicaldata/reference/licorice_gargle.html) and transformed into a not tidy format before it was given to us to use as part of the RMED901 exam in fall 2024.
+The original data came from the [medicaldata webpage](https://higgi13425.github.io/medicaldata/reference/licorice_gargle.html) and transformed into a not tidy format before it was given to us to use as part of the RMED901 exam in fall 2024.
 
-The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the original data. For more information on the data see [codebook](DATA/codebook.html).
+The data is taken from a study of patients undergoing elective thoracic surgery requiring a double-lumen endotracheal tube. 236 adult patients were enrolled. The study investigates whether gargling with licorice before anesthesia can prevent postoperative sore throat and coughing in these patients. Data on Gender, physical status, BMI, age, Mallampati score, smoking status, preoperative pain, surgery size, intervention and the outcomes (cough, sore throat and pain swallowing at various time points) are provided in the original data. For more information on the data see [codebook](DATA/codebook.html).
 
 ## Reading data
 
@@ -99,6 +100,20 @@ str(combined_data)
 
 #### Rearranging dataset
 
+-   renaming columns
+
+-   combined month and year into a single column "date in month-year (my) format
+
+-   split the coloumn ASA_Mallampati into two separate variables
+
+-   sorted rows based in patient ID
+
+-   added new columns showing change in cough and throat pain
+
+-   cutting BMI into quartiles
+
+-   Reordering columns and selecting which to keep
+
 ```{r rearranging dataset, echo=FALSE}
 combined_data <- combined_data %>%
   # Renaming columns
@@ -109,7 +124,7 @@ combined_data <- combined_data %>%
   # Combine month and year into a single column 'date' and convert to day-month-year format
   mutate(date = paste("01", month, year, sep = "-")) %>%
   mutate(date = dmy(date)) %>%
-  # Split column 'preOp_ASA_Mallampati' into 'ASA_score' and 'Mallampati score'
+  # Split column 'preOp_ASA_Mallampati' into 'ASA_score' and 'Mallamdata:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABH0lEQVR4XmNgGAVDCqxdvzVhzcbNm6mBK6uqVqObDwf///9nXLt+SzG6JlJxTW3tVpBZ6OajgP3797Os3bClFV0zsbiuoXEfyAx0c7GCRTt3cq9Zv7UX3RBCuL6x8TBIL7p5eMGqVbv512zYMgvdMFy4san1FEgPujlEgbVrd0gCg3EJuqHouLm59TxILbp+ksCqjdvV12zcshLdcBhuamm7BFKDro8ssGbjRr01G7aux7Ckte0qSA5dPUVg9frNDkDLNsGDq7X9GkgMXR1VwNoNm0MgPmm/DmKjy49wwLjIbzM1MLq5GIBxgc9mhm2eFGGwGYQA42wvDI2kYrAZhADjdEyNpGKwGYQA42Q3DI2kYrAZBEGfy2aq4FEw5AAASl8F3R9fQqAAAAAASUVORK5CYII=pati score'
   separate(preOp_ASA_Mallampati, into = c("ASA_score", "Mallampati_score"), sep = "_") %>%
   # Sort rows based on patient IDs
   arrange(patient_id) %>%
@@ -127,6 +142,8 @@ combined_data <- combined_data %>%
   
   # Reordering columns and selecting which to keep
   select(patient_id, BMI, age, smoking, gender, date, everything(), -month, -year)
+
+combined_data
 ```
 
 #### Removing duplicates
@@ -150,7 +167,7 @@ combined_data %>%
   filter(patient_id==48)
 ```
 
-#### Tidy data
+======= \#### Tidy data
 
 ```{r Create tidy data file, echo=FALSE}
 write_csv2(combined_data, file = here("DATA", "clean_data.csv"))
@@ -192,9 +209,167 @@ combined_data %>%
 
 ## Plots
 
-```{r read clean data, include=FALSE}
+```{r, include=TRUE}
 data <- read.csv2(here("DATA", "clean_data.csv"))
 ```
+
+# **Analyis: Relationship between variables**
+
+## **Are there any correlated measurements?**
+
+```{r correlation-plot, fig.width=9, fig.height=9}
+# Create correlation matrix excluding non-numeric and irrelevant columns
+corr <- data %>%
+  select(-gender, -date, -BMI_quartile, -patient_id) %>%
+  cor()
+
+# Create matrix of correlation p-values
+p.mat <- data %>%
+  select(-gender, -date, -BMI_quartile, -patient_id) %>%
+  cor_pmat()
+
+# Plot the correlation matrix with p-values
+corr_plot <- ggcorrplot(corr,
+                        method = "circle",
+                        hc.order = TRUE,
+                        title = "Correlation plot",
+                        outline.color = "white",
+                        p.mat = p.mat
+)
+
+# Display plot
+corr_plot
+
+
+```
+
+### Conclusion: several measurements are correlated: e.g., `pacu30min_swallowPain` and `pacu30min_throatpain`
+
+```{r specify variables, include=FALSE, warning= FALSE}
+data <- data %>%
+  mutate(
+    ASA_score = as.factor(ASA_score),
+    Mallampati_score = as.factor(Mallampati_score),
+    smoking = as.factor(smoking),
+    preOp_pain = as.factor(preOp_pain),
+    treat = as.factor(treat),
+    pacu30min_throatPain = as.factor(pacu30min_throatPain),
+    pacu90min_throatPain = as.factor(pacu90min_throatPain),
+    postOp4hour_throatPain = as.factor(postOp4hour_throatPain),
+    pod1am_throatPain = as.factor(pod1am_throatPain),
+    pacu30min_cough = as.factor(pacu30min_cough),
+    pacu90min_cough = as.factor(pacu90min_cough),
+    postOp4hour_cough = as.factor(postOp4hour_cough),
+    pod1am_cough = as.factor(pod1am_cough),
+    extubation_cough = as.factor(extubation_cough)
+  )
+
+```
+
+## **Does the `age` distribution depend on `treat`?**
+
+```{r Age vs. Treat, include = TRUE, warning= FALSE}
+# Boxplot Age vs. Treat
+boxplot_treat <- ggplot(data, aes(x = treat, y = age, fill = treat)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("0" = "#E1E1E1", "1" = "#649CB8")) +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
+  labs(title = "Box-plot") +
+  theme_classic() +
+  coord_flip()
+
+# Histogram Age vs. Treat
+histogram_treat <- ggplot(data, aes(y = age, fill = treat)) +
+  geom_histogram(binwidth = 10, position = "dodge", color = "black") +
+  scale_fill_manual(values = c("0" = "#E1E1E1", "1" = "#649CB8")) +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
+  labs(title = "Histogram") +
+  theme_classic() +
+  coord_flip()
+
+# Combine plots
+Age_vs_treat_plot <- (boxplot_treat / histogram_treat) +
+  plot_annotation(
+    title = "Age vs. Treatment",
+    theme = theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+  )
+
+# Display the plot
+Age_vs_treat_plot
+
+```
+
+### Conclusion: the distribution of `age` does not appear to depend on `treatment`.
+
+## **Does the `age` distribution of the patients depend on their `gender`?**
+
+```{r Age vs. Gender, include = TRUE, warning= FALSE}
+
+# Boxplot: Age vs. Gender
+boxplot_gender <- ggplot(data, aes(x = gender, y = age, fill = gender)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("Female" = "#FBADA7", "Male" = "#64B8B8")) +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
+  labs(title = "Box-plot") +
+  theme_classic() +
+  coord_flip()
+
+# Histogram: Age vs. Gender
+histogram_gender <- ggplot(data, aes(y = age, fill = gender)) +
+  geom_histogram(binwidth = 10, position = "dodge", color = "black") +
+  scale_fill_manual(values = c("Female" = "#FBADA7", "Male" = "#64B8B8")) +
+  scale_y_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), limits = c(0, 100)) +
+  labs(title = "Histogram") +
+  theme_classic() +
+  coord_flip()
+
+# Combine plots
+Age_vs_gender_plot <- (boxplot_gender / histogram_gender) +
+  plot_annotation(
+    title = "Age vs. Gender",
+    theme = theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+  )
+
+# Display the plot
+Age_vs_gender_plot
+
+```
+
+### Conclusion: The distribution of `age` does not appear to depend on `gender`.
+
+## **Do `BMI` and `age` have a linear relationship?**
+
+```{r Age vs. BMI, include = TRUE, warning= FALSE}
+
+# ---- Do BMI and age have a linear relationship? -----------------------------------------
+
+Regresssion_plot <- ggplot(data, aes(x = age, y = as.numeric(BMI))) +
+  geom_point(alpha = 0.8, size = 2) +
+  geom_smooth(method = "lm", color = "steelblue", se = TRUE, size = 2, fill = "lightblue") +
+  labs(
+    title = "BMI and age relationship",
+    x = " Age of Patients",
+    y = "BMI"
+  ) +
+  theme_classic()
+
+# Display the plot
+Regresssion_plot
+
+```
+
+### Conclusion: it appears to be a linear relationship between `BMI` and `age`.
+
+## **Does the `preOp_pain` change with the `age` of the patients?**
+
+```{r preOppain vs. age, include = TRUE, warning= FALSE}
+
+sum(data$preOp_pain == 1)
+sum(data$preOp_pain != 1)
+
+```
+
+#### Conclusion: Only two patients (out of 249) reported `preOp_pain` - there is insufficient data to test for a relationship.
 
 ## Statistical analysis
 
