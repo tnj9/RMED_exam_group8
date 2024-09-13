@@ -66,7 +66,7 @@ To tidy the data we had to:
 -   Remove duplicated columns and rows
 -   Rearranged the dataset
 
-#### Dealing with missing values
+### Dealing with missing values
 
 ```{r identifying rows with NA}
 na_rows <- combined_data %>%
@@ -81,7 +81,7 @@ combined_data <- combined_data %>%
 
 ```
 
-#### Changing variable types
+### Changing variable types
 
 ```{r changing variable types, echo=FALSE}
 combined_data <- combined_data %>%
@@ -98,7 +98,7 @@ combined_data <- combined_data %>%
 str(combined_data)
 ```
 
-#### Rearranging dataset
+### Rearranging dataset
 
 -   renaming columns
 
@@ -146,7 +146,7 @@ combined_data <- combined_data %>%
 combined_data
 ```
 
-#### Removing duplicates
+### Removing duplicates
 
 ```{r Removing duplicate column}
 unique(combined_data$preOp_gender == combined_data$gender)
@@ -167,19 +167,13 @@ combined_data %>%
   filter(patient_id==48)
 ```
 
-<<<<<<< HEAD
-#### Tidy data
-=======
-======= \#### Tidy data
->>>>>>> 699daa1b266c37750ebd54befd193ac6fa4986f7
-
 ```{r Create tidy data file, echo=FALSE}
 write_csv2(combined_data, file = here("DATA", "clean_data.csv"))
 ```
 
 ## Stratifying data
 
-Data was stratified by a gender and min, max, mean and sd of age was reported.
+### Data was stratified by a gender and min, max, mean and sd of age was reported.
 
 ```{r Stratify gender}
 combined_data %>% 
@@ -187,7 +181,7 @@ combined_data %>%
   summarise(min(age), max(age), mean(age), sd(age))
 ```
 
-Data was also stratified by the following instructions:
+### Data stratified by the following instructions:
 
 -   BMI \<25
 -   Gender = female
@@ -203,7 +197,7 @@ combined_data %>%
   summarise(min(age), max(age), mean(age), sd(age))
 ```
 
-Table based on gender and BMI_quartile
+### Table based on gender and BMI_quartile
 
 ```{r Gender and BMI_quartile table}
 combined_data %>%
@@ -217,9 +211,9 @@ combined_data %>%
 data <- read.csv2(here("DATA", "clean_data.csv"))
 ```
 
-# **Analyis: Relationship between variables**
+### **Analyis: Relationship between variables**
 
-## **Are there any correlated measurements?**
+#### **Are there any correlated measurements?**
 
 ```{r correlation-plot, fig.width=9, fig.height=9}
 # Create correlation matrix excluding non-numeric and irrelevant columns
@@ -247,7 +241,7 @@ corr_plot
 
 ```
 
-### Conclusion: several measurements are correlated: e.g., `pacu30min_swallowPain` and `pacu30min_throatpain`
+**Conclusion: several measurements are correlated: e.g., `pacu30min_swallowPain` and `pacu30min_throatpain`**
 
 ```{r specify variables, include=FALSE, warning= FALSE}
 data <- data %>%
@@ -270,7 +264,7 @@ data <- data %>%
 
 ```
 
-## **Does the `age` distribution depend on `treat`?**
+### **Does the `age` distribution depend on `treat`?**
 
 ```{r Age vs. Treat, include = TRUE, warning= FALSE}
 # Boxplot Age vs. Treat
@@ -303,9 +297,9 @@ Age_vs_treat_plot
 
 ```
 
-### Conclusion: the distribution of `age` does not appear to depend on `treatment`.
+**Conclusion: the distribution of `age` does not appear to depend on `treatment`.**
 
-## **Does the `age` distribution of the patients depend on their `gender`?**
+### **Does the `age` distribution of the patients depend on their `gender`?**
 
 ```{r Age vs. Gender, include = TRUE, warning= FALSE}
 
@@ -339,9 +333,9 @@ Age_vs_gender_plot
 
 ```
 
-### Conclusion: The distribution of `age` does not appear to depend on `gender`.
+**Conclusion: The distribution of `age` does not appear to depend on `gender`.**
 
-## **Do `BMI` and `age` have a linear relationship?**
+### **Do `BMI` and `age` have a linear relationship?**
 
 ```{r Age vs. BMI, include = TRUE, warning= FALSE}
 
@@ -362,9 +356,9 @@ Regresssion_plot
 
 ```
 
-### Conclusion: it appears to be a linear relationship between `BMI` and `age`.
+**Conclusion: it appears to be a linear relationship between `BMI` and `age`.**
 
-## **Does the `preOp_pain` change with the `age` of the patients?**
+### **Does the `preOp_pain` change with the `age` of the patients?**
 
 ```{r preOppain vs. age, include = TRUE, warning= FALSE}
 
@@ -373,40 +367,40 @@ sum(data$preOp_pain != 1)
 
 ```
 
-#### Conclusion: Only two patients (out of 249) reported `preOp_pain` - there is insufficient data to test for a relationship.
+**Conclusion: Only two patients (out of 249) reported `preOp_pain` - there is insufficient data to test for a relationship.**
 
 ## Statistical analysis
 
-#### Does the treatment depend on the preoperative smoking?
+### Does the treatment depend on the preoperative smoking?
 
 ```{r treat smoking}
 logistic_model <- glm(data$treat ~ data$smoking, family = binomial())
 summary(logistic_model)
 ```
 
-The likelihood of receiving licorice treatment do not depend on Preoperative smoking status (P \> 0.05).
+**The likelihood of receiving licorice treatment do not depend on Preoperative smoking status (P \> 0.05).**
 
-#### Does the treatment depend on the gender of the patient?
+### Does the treatment depend on the gender of the patient?
 
 ```{r treat gender}
 logistic_model_treatment_gender <- glm(data$treat ~ data$gender, family = binomial())
 summary(logistic_model_treatment_gender)
 ```
 
-The likelihood of receiving licorice treatment does not depend on gender (P \> 0.05).
+**The likelihood of receiving licorice treatment does not depend on gender (P \> 0.05).**
 
-#### Does the treatment depend on whether the patient had a preoperative pain?
+### Does the treatment depend on whether the patient had a preoperative pain?
 
 ```{r treat preop pain}
 logistic_model_treatment_preoppain <- glm(data$treat ~ data$preOp_pain, family = binomial())
 summary(logistic_model_treatment_preoppain)
 ```
 
-The likelihood of receiving licorice treatment does not depend on preoperative pain (P \> 0.05).
+**The likelihood of receiving licorice treatment does not depend on preoperative pain (P \> 0.05).**
 
-#### Was the treatment with licorice gargle reducing the risk of post operative throat pain?
+### Was the treatment with licorice gargle reducing the risk of post operative throat pain?
 
--   We performed a logistic regression between "treat" and "throat pain" reported at four time intervals after surgery (30min, 90min,4hours and 1am)
+#### We performed a logistic regression between "treat" and "throat pain" reported at four time intervals after surgery (30min, 90min,4hours and 1am)
 
 ```{r risk of postoperative pain ~ 30 minutes, eval=FALSE}
 model_pacu30min_throatPain <- glm(pacu30min_throatPain ~ treat, data = data, family = binomial)
@@ -414,7 +408,8 @@ summary(model_pacu30min_throatPain)
 odds_ratio_pacu30min <- (exp(coef(model_pacu30min_throatPain)["treat1"]) - 1) * 100
 odds_ratio_pacu30min
 ```
-P<0.05, odds ratio shows 65.4% risk reduction of having throat pain when treated with licorice gargling before intubation
+
+**P\<0.05, odds ratio shows 65.4% risk reduction of having throat pain when treated with licorice gargling before intubation**
 
 ```{r risk of poeroperative pain ~90 minutes, eval=FALSE}
 model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
@@ -422,7 +417,8 @@ summary(model_pacu90min_throatPain)
 odds_ratio_pacu90min <- (exp(coef(model_pacu90min_throatPain)["treat1"]) - 1) * 100
 odds_ratio_pacu90min
 ```
-P<0.05, odds ratio shows 80.6% risk reduction of having throat pain when treated with licorice gargling before intubation
+
+**P\<0.05, odds ratio shows 80.6% risk reduction of having throat pain when treated with licorice gargling before intubation**
 
 ```{r risk of postoperative pain ~ 4 hours, eval=FALSE}
 model_postOp4hour_throatPain <- glm(postOp4hour_throatPain ~ treat, data = data, family = binomial)
@@ -430,7 +426,8 @@ summary(model_postOp4hour_throatPain)
 odds_ratio_postOp4hours <- (exp(coef(model_postOp4hour_throatPain)["treat1"]) - 1) * 100
 odds_ratio_postOp4hours
 ```
-P<0.05, odds ratio shows 70.3% risk reduction of having throat pain when treated with licorice gargling before intubation
+
+**P\<0.05, odds ratio shows 70.3% risk reduction of having throat pain when treated with licorice gargling before intubation**
 
 ```{r risk of postop pain ~pod1am, eval=FALSE}
 model_pod1am_throatPain <- glm(pod1am_throatPain ~ treat, data = data, family = binomial)
@@ -438,9 +435,12 @@ summary(model_pod1am_throatPain)
 odds_ratio_pod1am <- (exp(coef(model_pod1am_throatPain)["treat1"]) - 1) * 100
 odds_ratio_pod1am
 ```
-P<0.05, odds ratio shows 66.8% risk reduction of having throat pain when treated with licorice gargling before intubation
 
+**P\<0.05, odds ratio shows 66.8% risk reduction of having throat pain when treated with licorice gargling before intubation**
 
+## Codebook
+
+For the updated codebook see [here](DATA/Codebook_clean_data.Rmd)
 
 ## Session info
 
