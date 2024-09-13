@@ -41,6 +41,13 @@ Contains three datasets:
 
 Comment:Exam_dataset.txt and exam_joindata.txt are raw datasets from the project.clean_data.csv is the cleaned and processed version (with 24 variables) derived from the raw data after tidying and wrangling. Clean_data.csv includes details on gender, age, BMI, physical status, Mallampati score, smoking status, preoperative pain, surgery size, treatment intervention, and three outcomes (cough, sore throat, and pain when swallowing) at various time points.
 
+Contains two codebooks:
+
+- codebook.html
+- Codebook_clean_data.html
+- Codebook_clean_data.Rmd
+
+Comment: codebook.html belongs to the original data, while Codebook_clean_data.html is the codebook adjusted to the tidied data set. 
 
 #### 2.Scripts: 
 Contains two R scripts: 
@@ -50,16 +57,13 @@ Contains two R scripts:
   
 Comment: Script_tidy.R combines and performs tidying and wrangling of the two raw datasets, generating the cleaned dataset clean_data.csv.Script_analyze.R explores the relationships between several variables in clean_data.csv through plotting and statistical analysis.
 
-#### 3.Results:
-Contains a R Markdown file - Reports.Rmd - which summarizes the findings and results from the analyses conducted in the scripts.
-
-#### 4.Figures:
+#### 3.Figures:
 Contains the plots generated during the analysis in Script_analyze.R.
 
-#### 5.Exam:
+#### 4.Exam:
 Contains two markdown files: exam_checklist.md and exam_descr.md, which describe the tasks performed to produce the scripts and results.
 
-#### 6.Documentation and Tools:
+#### 5.Documentation and Tools:
 Contains the project documentation files such as the MIT license, .Rhistory, and .gitignore files. 
 
 
