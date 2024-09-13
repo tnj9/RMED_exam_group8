@@ -13,7 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyr)
 library(here)
 library(tidyverse)
-
+library(ggplot2)
+library(patchwork)
+library(ggcorrplot)
+library(dplyr)
+library(styler)
 ```
 
 ## Original data
