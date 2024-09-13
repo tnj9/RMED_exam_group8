@@ -227,7 +227,7 @@ The likelihood of receiving licorice treatment does not depend on preoperative p
 
 #### Was the treatment with licorice gargle reducing the risk of post operative throat pain?
 
-```{r}
+```{r risk of postop pain}
 # Fit the logistic regression between 'treat' and throat pain reported at four time intervals after surgery (30min, 90min, 4hours and 1am)
 model_pacu30min_throatPain <- glm(pacu30min_throatPain ~ treat, data = data, family = binomial)
 model_pacu90min_throatPain <- glm(pacu90min_throatPain ~ treat, data = data, family = binomial)
