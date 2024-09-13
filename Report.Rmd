@@ -440,7 +440,7 @@ odds_ratio_pod1am
 
 ## Codebook
 
-For the updated codebook see [here](DATA/Codebook_clean_data.Rmd)
+For the updated codebook see [here](DATA/Codebook_clean_data.html)
 
 ## Session info
 
